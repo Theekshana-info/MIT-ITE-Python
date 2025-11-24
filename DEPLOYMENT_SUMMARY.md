@@ -20,7 +20,7 @@
 
 ### 5. ✅ Environment Variables - DOCUMENTED
 **Problem**: No documentation for required environment variables  
-**Solution**: Created `.env.example` template with required variables
+**Solution**: Created `.env.example` - **NO ENVIRONMENT VARIABLES REQUIRED!** Project uses in-memory storage.
 
 ### 6. ✅ Git Ignore - UPDATED
 **Problem**: Environment files and Vercel config not ignored  
@@ -47,9 +47,7 @@
 ### Option 1: Deploy via Vercel Dashboard (Easiest)
 1. Go to https://vercel.com/new
 2. Import your GitHub repository: `Theekshana-info/MIT-ITE-Python`
-3. Add environment variable:
-   - Key: `DATABASE_URL`
-   - Value: Your PostgreSQL connection string
+3. **No environment variables needed!**
 4. Click **Deploy**
 
 ### Option 2: Deploy via Vercel CLI
@@ -63,25 +61,25 @@ vercel login
 # Deploy
 vercel
 
-# Add environment variable
-vercel env add DATABASE_URL
-
 # Deploy to production
 vercel --prod
 ```
 
+**That's it!** No database or environment variables needed.
+
 ---
 
-## Database Setup Required
+## Database Setup ~~Required~~
 
-You need a PostgreSQL database. Free options:
-- **Neon** (https://neon.tech) - Recommended, PostgreSQL with generous free tier
-- **Supabase** (https://supabase.com) - PostgreSQL + additional features
-- **Vercel Postgres** (https://vercel.com/docs/storage/vercel-postgres) - Integrated with Vercel
+**NOT REQUIRED!** This project uses in-memory storage via the `MemStorage` class in `server/storage.ts`. 
 
-After getting your database connection string:
-1. Add it to Vercel as `DATABASE_URL` environment variable
-2. Run `npm run db:push` to initialize the schema
+This means:
+- ✅ No database setup needed
+- ✅ No environment variables required
+- ✅ Instant deployment
+- ⚠️ Data resets when server restarts (perfect for a learning platform)
+
+If you want to add persistent storage in the future, you can implement a database-backed storage class.
 
 ---
 
@@ -98,12 +96,14 @@ Before going live, verify:
 
 ---
 
-## Environment Variables Required
+## Environment Variables ~~Required~~
 
-| Variable | Description | Where to Get It |
-|----------|-------------|-----------------|
-| `DATABASE_URL` | PostgreSQL connection string | From your database provider (Neon, Supabase, etc.) |
-| `PORT` | Server port | Auto-set by Vercel (don't add manually) |
+**NONE!** 🎉
+
+| Variable | Status | Notes |
+|----------|--------|-------|
+| `PORT` | Auto-set by Vercel | Don't add manually |
+| `DATABASE_URL` | Not required | Project uses in-memory storage |
 
 ---
 
