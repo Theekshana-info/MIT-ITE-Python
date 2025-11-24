@@ -1,4 +1,4 @@
-import { Search, Home, Database, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Grid3x3, GitGraph, Trophy, BookOpen, Menu } from "lucide-react";
+import { Search, Home, Database, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Grid3x3, GitGraph, Trophy, BookOpen, Menu, Terminal } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ const menuItems = [
   { title: "Arrays / Lists", url: "/arrays", icon: ListOrdered, testId: "nav-arrays" },
   { title: "NumPy", url: "/numpy", icon: Grid3x3, testId: "nav-numpy" },
   { title: "Flowcharts", url: "/flowcharts", icon: GitGraph, testId: "nav-flowcharts" },
+  { title: "Code Editor", url: "/code-editor", icon: Terminal, testId: "nav-code-editor" },
   { title: "Activities", url: "/activities", icon: Trophy, testId: "nav-activities" },
   { title: "Summary", url: "/summary", icon: BookOpen, testId: "nav-summary" },
 ];

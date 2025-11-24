@@ -20,6 +20,7 @@ import NumPy from "@/pages/NumPy";
 import Flowcharts from "@/pages/Flowcharts";
 import Activities from "@/pages/Activities";
 import Summary from "@/pages/Summary";
+import CodeEditor from "@/pages/CodeEditor";
 import NotFound from "@/pages/not-found";
 
 function Router({ searchQuery }: { searchQuery: string }) {
@@ -36,6 +37,7 @@ function Router({ searchQuery }: { searchQuery: string }) {
       <Route path="/flowcharts" component={() => <Flowcharts searchQuery={searchQuery} />} />
       <Route path="/activities" component={() => <Activities searchQuery={searchQuery} />} />
       <Route path="/summary" component={() => <Summary searchQuery={searchQuery} />} />
+      <Route path="/code-editor" component={() => <CodeEditor searchQuery={searchQuery} />} />
       <Route component={NotFound} />
     </Switch>
   );

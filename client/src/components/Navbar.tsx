@@ -7,7 +7,8 @@ import {
   BookOpen, 
   Trophy,
   Menu,
-  X
+  X,
+  Terminal
 } from "lucide-react";
 import { useState } from "react";
 
@@ -18,6 +19,7 @@ export function Navbar() {
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/data-types", label: "Learn", icon: BookOpen },
+    { href: "/code-editor", label: "Code Editor", icon: Terminal },
     { href: "/activities", label: "Practice", icon: Trophy },
     { href: "/summary", label: "Reference", icon: Code2 },
   ];
