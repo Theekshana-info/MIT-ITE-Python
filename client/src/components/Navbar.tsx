@@ -24,6 +24,14 @@ export function Navbar() {
     { href: "/summary", label: "Reference", icon: Code2 },
   ];
 
+  // Desktop navigation (all links)
+  const desktopNavLinks = navLinks;
+
+  // Mobile navigation (exclude Home and Code Editor from hamburger menu)
+  const mobileMenuLinks = navLinks.filter(
+    link => link.href !== "/" && link.href !== "/code-editor"
+  );
+
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
     if (path !== "/" && location.startsWith(path)) return true;
@@ -45,14 +53,14 @@ export function Navbar() {
               <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary text-primary-foreground">
                 <Code2 className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <span>MIT ITE 1213</span>
+              <span>Python</span>
             </a>
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:gap-1">
-          {navLinks.map((link) => {
+          {desktopNavLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.href);
             return (
@@ -72,8 +80,35 @@ export function Navbar() {
           })}
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex flex-1 justify-end lg:hidden">
+        {/* Mobile Quick Access Buttons + Menu Button */}
+        <div className="flex flex-1 justify-end lg:hidden gap-2">
+          {/* Home Button */}
+          <Link href="/">
+            <a>
+              <Button
+                variant={isActive("/") ? "default" : "ghost"}
+                size="sm"
+                aria-label="Home"
+              >
+                <Home className="w-4 h-4" />
+              </Button>
+            </a>
+          </Link>
+          
+          {/* Code Editor Button */}
+          <Link href="/code-editor">
+            <a>
+              <Button
+                variant={isActive("/code-editor") ? "default" : "ghost"}
+                size="sm"
+                aria-label="Code Editor"
+              >
+                <Terminal className="w-4 h-4" />
+              </Button>
+            </a>
+          </Link>
+
+          {/* Hamburger Menu Button */}
           <Button
             variant="ghost"
             size="sm"
@@ -105,7 +140,7 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden border-t bg-background">
           <div className="px-4 py-4 space-y-2">
-            {navLinks.map((link) => {
+            {mobileMenuLinks.map((link) => {
               const Icon = link.icon;
               const active = isActive(link.href);
               return (

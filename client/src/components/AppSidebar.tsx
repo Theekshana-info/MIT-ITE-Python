@@ -1,8 +1,5 @@
-import { Search, Home, Database, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Grid3x3, GitGraph, Trophy, BookOpen, Menu, Terminal } from "lucide-react";
+import { Home, Database, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Grid3x3, GitGraph, Trophy, BookOpen, Terminal } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 const menuItems = [
   { title: "Home", url: "/", icon: Home, testId: "nav-home" },
@@ -20,25 +17,10 @@ const menuItems = [
 ];
 
 interface AppSidebarProps {
-  onSearch: (query: string) => void;
-  searchQuery: string;
   currentPath: string;
 }
 
-export function AppSidebar({ onSearch, searchQuery, currentPath }: AppSidebarProps) {
-  const [localSearch, setLocalSearch] = useState(searchQuery);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setLocalSearch(value);
-    onSearch(value);
-  };
-
-  const handleClearSearch = () => {
-    setLocalSearch("");
-    onSearch("");
-  };
-
+export function AppSidebar({ currentPath }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
@@ -49,28 +31,6 @@ export function AppSidebar({ onSearch, searchQuery, currentPath }: AppSidebarPro
           <p className="text-xs sm:text-sm text-muted-foreground" data-testid="text-app-subtitle">
             MIT/ITE 1213
           </p>
-        </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search tutorials..."
-            value={localSearch}
-            onChange={handleSearchChange}
-            className="pl-9"
-            data-testid="input-search"
-          />
-          {searchQuery && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClearSearch}
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 px-2 text-xs"
-              data-testid="button-clear-search"
-            >
-              Clear
-            </Button>
-          )}
         </div>
       </SidebarHeader>
       <SidebarContent>

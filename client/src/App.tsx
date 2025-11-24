@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Navbar } from "@/components/Navbar";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 // Pages
 import Home from "@/pages/Home";
@@ -23,21 +23,21 @@ import Summary from "@/pages/Summary";
 import CodeEditor from "@/pages/CodeEditor";
 import NotFound from "@/pages/not-found";
 
-function Router({ searchQuery }: { searchQuery: string }) {
+function Router() {
   return (
     <Switch>
-      <Route path="/" component={() => <Home searchQuery={searchQuery} />} />
-      <Route path="/data-types" component={() => <DataTypes searchQuery={searchQuery} />} />
-      <Route path="/operators" component={() => <Operators searchQuery={searchQuery} />} />
-      <Route path="/conditionals" component={() => <Conditionals searchQuery={searchQuery} />} />
-      <Route path="/loops" component={() => <Loops searchQuery={searchQuery} />} />
-      <Route path="/functions" component={() => <Functions searchQuery={searchQuery} />} />
-      <Route path="/arrays" component={() => <Arrays searchQuery={searchQuery} />} />
-      <Route path="/numpy" component={() => <NumPy searchQuery={searchQuery} />} />
-      <Route path="/flowcharts" component={() => <Flowcharts searchQuery={searchQuery} />} />
-      <Route path="/activities" component={() => <Activities searchQuery={searchQuery} />} />
-      <Route path="/summary" component={() => <Summary searchQuery={searchQuery} />} />
-      <Route path="/code-editor" component={() => <CodeEditor searchQuery={searchQuery} />} />
+      <Route path="/" component={() => <Home searchQuery="" />} />
+      <Route path="/data-types" component={() => <DataTypes searchQuery="" />} />
+      <Route path="/operators" component={() => <Operators searchQuery="" />} />
+      <Route path="/conditionals" component={() => <Conditionals searchQuery="" />} />
+      <Route path="/loops" component={() => <Loops searchQuery="" />} />
+      <Route path="/functions" component={() => <Functions searchQuery="" />} />
+      <Route path="/arrays" component={() => <Arrays searchQuery="" />} />
+      <Route path="/numpy" component={() => <NumPy searchQuery="" />} />
+      <Route path="/flowcharts" component={() => <Flowcharts searchQuery="" />} />
+      <Route path="/activities" component={() => <Activities searchQuery="" />} />
+      <Route path="/summary" component={() => <Summary searchQuery="" />} />
+      <Route path="/code-editor" component={() => <CodeEditor searchQuery="" />} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -45,7 +45,6 @@ function Router({ searchQuery }: { searchQuery: string }) {
 
 function App() {
   const [location] = useLocation();
-  const [searchQuery, setSearchQuery] = useState("");
 
   // Scroll to top on route change
   useEffect(() => {
@@ -64,15 +63,13 @@ function App() {
         <SidebarProvider style={style as React.CSSProperties}>
           <div className="flex h-screen w-full">
             <AppSidebar 
-              onSearch={setSearchQuery} 
-              searchQuery={searchQuery}
               currentPath={location}
             />
             <div className="flex flex-col flex-1 overflow-hidden">
               <Navbar />
               <main className="flex-1 overflow-y-auto bg-background">
                 <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6 sm:py-8">
-                  <Router searchQuery={searchQuery} />
+                  <Router />
                 </div>
               </main>
             </div>
