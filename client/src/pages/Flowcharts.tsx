@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { flowchartsContent } from "@/data/flowcharts";
+import { FlowchartDiagram } from "@/components/FlowchartDiagram";
 
 interface FlowchartsProps {
   searchQuery: string;
@@ -78,13 +79,12 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
               </ol>
             </div>
 
-            <div className="p-6 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground mb-4 text-center">
-                Visual flowchart will be rendered here with interactive components
-              </p>
-              <div className="text-xs text-muted-foreground text-center italic">
-                (Flowchart visualization coming in next section)
-              </div>
+            <div>
+              <h3 className="font-semibold mb-4">Visual Flowchart:</h3>
+              <FlowchartDiagram
+                nodes={example.flowchart.nodes}
+                connections={example.flowchart.connections}
+              />
             </div>
           </CardContent>
         </Card>
