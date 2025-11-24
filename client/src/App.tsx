@@ -52,7 +52,7 @@ function App() {
   // Custom sidebar width for better readability
   const style = {
     "--sidebar-width": "20rem",
-    "--sidebar-width-icon": "4rem",
+    "--sidebar-width-icon": "3rem",
   };
 
   return (
@@ -66,11 +66,11 @@ function App() {
               currentPath={location}
             />
             <div className="flex flex-col flex-1 overflow-hidden">
-              <header className="flex items-center justify-between p-4 border-b bg-background">
+              <header className="flex items-center justify-between px-3 py-3 sm:px-4 sm:py-4 border-b bg-background">
                 <SidebarTrigger data-testid="button-sidebar-toggle" />
               </header>
               <main className="flex-1 overflow-y-auto bg-background">
-                <div className="max-w-4xl mx-auto px-6 py-8">
+                <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6 sm:py-8">
                   <Router searchQuery={searchQuery} />
                 </div>
               </main>

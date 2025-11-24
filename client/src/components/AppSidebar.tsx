@@ -40,12 +40,12 @@ export function AppSidebar({ onSearch, searchQuery, currentPath }: AppSidebarPro
 
   return (
     <Sidebar>
-      <SidebarHeader className="p-6 pb-4">
+      <SidebarHeader className="p-4 sm:p-6 pb-3 sm:pb-4">
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-primary" data-testid="text-app-title">
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary leading-tight" data-testid="text-app-title">
             MIT/ITE-Fundamentals of Programming
           </h1>
-          <p className="text-sm text-muted-foreground" data-testid="text-app-subtitle">
+          <p className="text-xs sm:text-sm text-muted-foreground" data-testid="text-app-subtitle">
             MIT/ITE 1213
           </p>
         </div>

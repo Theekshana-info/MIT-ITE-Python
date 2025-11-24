@@ -11,41 +11,41 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight" data-testid="text-page-title">
           {highlightText(dataTypesContent.title)}
         </h1>
-        <p className="text-lg text-muted-foreground" data-testid="text-introduction">
+        <p className="text-base sm:text-lg text-muted-foreground" data-testid="text-introduction">
           {highlightText(dataTypesContent.introduction)}
         </p>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Built-in Data Types</CardTitle>
-          <CardDescription>Python has the following data types built-in by default</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Built-in Data Types</CardTitle>
+          <CardDescription className="text-sm">Python has the following data types built-in by default</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0 sm:p-6">
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full border-collapse min-w-[600px]">
               <thead>
                 <tr className="bg-muted">
-                  <th className="border p-3 text-left font-semibold">Category</th>
-                  <th className="border p-3 text-left font-semibold">Type</th>
-                  <th className="border p-3 text-left font-semibold">Description</th>
+                  <th className="border p-2 sm:p-3 text-left font-semibold text-sm">Category</th>
+                  <th className="border p-2 sm:p-3 text-left font-semibold text-sm">Type</th>
+                  <th className="border p-2 sm:p-3 text-left font-semibold text-sm">Description</th>
                 </tr>
               </thead>
               <tbody>
                 {dataTypesContent.types.map((type, idx) => (
                   <tr key={idx} className={idx % 2 === 0 ? "bg-background" : "bg-muted/30"}>
-                    <td className="border p-3 text-muted-foreground">{highlightText(type.category)}</td>
-                    <td className="border p-3">
-                      <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-primary">
+                    <td className="border p-2 sm:p-3 text-xs sm:text-sm text-muted-foreground">{highlightText(type.category)}</td>
+                    <td className="border p-2 sm:p-3">
+                      <code className="bg-muted px-1.5 sm:px-2 py-1 rounded text-xs sm:text-sm font-mono text-primary">
                         {highlightText(type.name)}
                       </code>
                     </td>
-                    <td className="border p-3">{highlightText(type.description)}</td>
+                    <td className="border p-2 sm:p-3 text-xs sm:text-sm">{highlightText(type.description)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -55,19 +55,19 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Examples for Each Data Type</CardTitle>
-          <CardDescription>Short Python snippets that show typical usage and how to check the type.</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Examples for Each Data Type</CardTitle>
+          <CardDescription className="text-sm">Short Python snippets that show typical usage and how to check the type.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
             {dataTypesContent.typeExamples?.map((ex, idx) => (
               <div
                 key={idx}
-                className="p-4 border rounded-lg bg-card space-y-2"
+                className="p-3 sm:p-4 border rounded-lg bg-card space-y-2"
                 data-testid={`card-type-example-${ex.name}`}
               >
-                <h3 className="text-lg font-semibold text-primary">{highlightText(ex.title)}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-primary">{highlightText(ex.title)}</h3>
                 <CodeBlock code={ex.code} showLineNumbers />
               </div>
             ))}
@@ -77,20 +77,20 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
 
       {/* Additional general examples section */}
       <Card>
-        <CardHeader>
-          <CardTitle>Working with Data Types</CardTitle>
-          <CardDescription>Detecting and creating values using literals and constructor functions.</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Working with Data Types</CardTitle>
+          <CardDescription className="text-sm">Detecting and creating values using literals and constructor functions.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-8">
+        <CardContent className="space-y-6 sm:space-y-8 p-4 sm:p-6">
           {dataTypesContent.examples.map((ex, idx) => (
-            <div key={idx} className="space-y-3" data-testid={`datatype-general-example-${idx}`}> 
-              <h3 className="text-base font-semibold text-primary">{highlightText(ex.title)}</h3>
-              <p className="text-sm text-muted-foreground">{highlightText(ex.description)}</p>
+            <div key={idx} className="space-y-2 sm:space-y-3" data-testid={`datatype-general-example-${idx}`}> 
+              <h3 className="text-sm sm:text-base font-semibold text-primary">{highlightText(ex.title)}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{highlightText(ex.description)}</p>
               {ex.code && <CodeBlock code={ex.code} showLineNumbers />}
               {ex.items && (
-                <div className="grid md:grid-cols-2 gap-3">
+                <div className="grid sm:grid-cols-2 gap-2 sm:gap-3">
                   {ex.items.map((item, itemIdx) => (
-                    <div key={itemIdx} className="border rounded-md p-3 bg-card">
+                    <div key={itemIdx} className="border rounded-md p-2 sm:p-3 bg-card">
                       <CodeBlock code={item.code} />
                       <p className="text-xs mt-1 text-muted-foreground">Type: <code className="font-mono text-primary">{item.type}</code></p>
                     </div>
@@ -98,7 +98,7 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
                 </div>
               )}
               {ex.output && (
-                <div className="bg-primary/5 border border-primary/30 rounded-md p-3 font-mono text-sm">
+                <div className="bg-primary/5 border border-primary/30 rounded-md p-2 sm:p-3 font-mono text-xs sm:text-sm">
                   <span className="font-semibold text-primary">Output:</span>
                   <div className="mt-2"><CodeBlock code={ex.output} /></div>
                 </div>
@@ -109,25 +109,25 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{dataTypesContent.collections.title}</CardTitle>
-          <CardDescription>{dataTypesContent.collections.description}</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">{dataTypesContent.collections.title}</CardTitle>
+          <CardDescription className="text-sm">{dataTypesContent.collections.description}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4">
+        <CardContent className="space-y-4 p-4 sm:p-6">
+          <div className="grid gap-3 sm:gap-4">
             {dataTypesContent.collections.types.map((collection, idx) => (
               <div
                 key={idx}
-                className="p-4 border rounded-lg bg-card space-y-2"
+                className="p-3 sm:p-4 border rounded-lg bg-card space-y-2"
                 data-testid={`card-collection-${collection.name.toLowerCase()}`}
               >
-                <h3 className="text-lg font-semibold text-primary">{highlightText(collection.name)}</h3>
-                <p className="text-sm text-muted-foreground">{highlightText(collection.properties)}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-primary">{highlightText(collection.name)}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">{highlightText(collection.properties)}</p>
                 <CodeBlock code={collection.example} />
               </div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground italic border-l-4 border-primary pl-4 py-2">
+          <p className="text-xs sm:text-sm text-muted-foreground italic border-l-4 border-primary pl-3 sm:pl-4 py-2">
             {highlightText(dataTypesContent.collections.note)}
           </p>
         </CardContent>

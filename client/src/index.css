@@ -320,4 +320,63 @@
     padding: 0.125rem 0.25rem;
     border-radius: 0.125rem;
   }
+
+  /* Mobile responsive improvements */
+  @media (max-width: 640px) {
+    /* Ensure code blocks don't overflow */
+    pre {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Make scrollbars thinner on mobile */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: hsl(var(--border));
+      border-radius: 2px;
+    }
+
+    /* Ensure tables are scrollable */
+    table {
+      font-size: 0.875rem;
+    }
+
+    /* Better touch targets for mobile */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Reduce font size slightly for better fit */
+    body {
+      font-size: 0.9375rem;
+    }
+
+    /* Better spacing for cards on mobile */
+    .space-y-8 > * + * {
+      margin-top: 1.5rem;
+    }
+
+    .space-y-6 > * + * {
+      margin-top: 1.25rem;
+    }
+  }
+
+  /* Tablet responsive improvements */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    /* Optimize for tablet screens */
+    .max-w-4xl {
+      max-width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
 }

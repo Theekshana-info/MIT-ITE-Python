@@ -92,36 +92,36 @@ export default function Home({ searchQuery }: HomeProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight" data-testid="text-page-title">
           Welcome to MIT/ITE-Fundamentals of Programming
         </h1>
-        <p className="text-lg text-muted-foreground" data-testid="text-page-description">
+        <p className="text-base sm:text-lg text-muted-foreground" data-testid="text-page-description">
           Master Python programming through simple explanations, practical examples, and interactive exercises.
           Choose a topic below to begin your learning journey!
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {filteredTopics.map((topic) => (
           <Card key={topic.title} className="hover-elevate transition-all duration-200" data-testid={`card-topic-${topic.title.toLowerCase().replace(/\s/g, '-')}`}>
-            <CardHeader>
+            <CardHeader className="p-4 sm:p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <topic.icon className={`h-5 w-5 ${topic.color}`} />
+                  <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                    <topic.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${topic.color}`} />
                     {highlightText(topic.title)}
                   </CardTitle>
-                  <CardDescription className="mt-2">
+                  <CardDescription className="mt-2 text-sm">
                     {highlightText(topic.description)}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <Button asChild variant="default" size="sm" data-testid={`button-start-${topic.title.toLowerCase().replace(/\s/g, '-')}`}>
-                <a href={topic.url} className="flex items-center gap-1">
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <Button asChild variant="default" size="sm" className="w-full sm:w-auto" data-testid={`button-start-${topic.title.toLowerCase().replace(/\s/g, '-')}`}>
+                <a href={topic.url} className="flex items-center justify-center gap-1">
                   Start Learning
                   <ArrowRight className="h-4 w-4" />
                 </a>
@@ -132,33 +132,33 @@ export default function Home({ searchQuery }: HomeProps) {
       </div>
 
       {filteredTopics.length === 0 && (
-        <Card className="p-12 text-center">
-          <p className="text-muted-foreground">No topics found matching "{searchQuery}"</p>
+        <Card className="p-8 sm:p-12 text-center">
+          <p className="text-sm sm:text-base text-muted-foreground">No topics found matching "{searchQuery}"</p>
         </Card>
       )}
 
       <Card className="bg-primary/5 border-primary/20">
-        <CardHeader>
-          <CardTitle>Why Learn Python?</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Why Learn Python?</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-foreground">
+        <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+          <p className="text-sm sm:text-base text-foreground">
             Python is one of the most popular programming languages in the world, known for its simplicity and readability.
             Whether you're interested in web development, data science, automation, or artificial intelligence,
             Python is an excellent language to start with.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <div className="p-4 bg-background rounded-lg border">
-              <h3 className="font-semibold mb-2">Easy to Learn</h3>
-              <p className="text-sm text-muted-foreground">Simple syntax that reads like English</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-4">
+            <div className="p-3 sm:p-4 bg-background rounded-lg border">
+              <h3 className="font-semibold mb-2 text-sm sm:text-base">Easy to Learn</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Simple syntax that reads like English</p>
             </div>
-            <div className="p-4 bg-background rounded-lg border">
-              <h3 className="font-semibold mb-2">Versatile</h3>
-              <p className="text-sm text-muted-foreground">Used in web, data, AI, automation, and more</p>
+            <div className="p-3 sm:p-4 bg-background rounded-lg border">
+              <h3 className="font-semibold mb-2 text-sm sm:text-base">Versatile</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Used in web, data, AI, automation, and more</p>
             </div>
-            <div className="p-4 bg-background rounded-lg border">
-              <h3 className="font-semibold mb-2">In-Demand</h3>
-              <p className="text-sm text-muted-foreground">Top skill sought by employers worldwide</p>
+            <div className="p-3 sm:p-4 bg-background rounded-lg border">
+              <h3 className="font-semibold mb-2 text-sm sm:text-base">In-Demand</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Top skill sought by employers worldwide</p>
             </div>
           </div>
         </CardContent>
