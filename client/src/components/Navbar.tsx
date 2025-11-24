@@ -38,9 +38,9 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 items-center px-4 sm:px-6 lg:px-8">
+      <div className="flex h-16 items-center px-4 sm:px-6 lg:px-8 gap-4">
         {/* Mobile Sidebar Trigger + Logo */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 pr-4 border-r border-border">
           <div className="lg:hidden">
             <SidebarTrigger data-testid="button-sidebar-toggle" />
           </div>
@@ -57,29 +57,34 @@ export function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:gap-1">
-          {desktopNavLinks.map((link) => {
+        <div className="hidden lg:flex lg:flex-1 lg:justify-center lg:gap-1 lg:px-4">
+          {desktopNavLinks.map((link, index) => {
             const Icon = link.icon;
             const active = isActive(link.href);
             return (
-              <Link key={link.href} href={link.href}>
-                <a>
-                  <Button
-                    variant={active ? "default" : "ghost"}
-                    className={`gap-2 ${active ? "" : "hover:bg-accent"}`}
-                    size="sm"
-                  >
-                    <Icon className="w-4 h-4" />
-                    {link.label}
-                  </Button>
-                </a>
-              </Link>
+              <div key={link.href} className="flex items-center">
+                <Link href={link.href}>
+                  <a>
+                    <Button
+                      variant={active ? "default" : "ghost"}
+                      className={`gap-2 ${active ? "" : "hover:bg-accent"}`}
+                      size="sm"
+                    >
+                      <Icon className="w-4 h-4" />
+                      {link.label}
+                    </Button>
+                  </a>
+                </Link>
+                {index < desktopNavLinks.length - 1 && (
+                  <div className="h-6 w-px bg-border mx-1" />
+                )}
+              </div>
             );
           })}
         </div>
 
         {/* Mobile Quick Access Buttons + Menu Button */}
-        <div className="flex flex-1 justify-end lg:hidden gap-2">
+        <div className="flex flex-1 justify-end lg:hidden gap-2 pl-4 border-l border-border">
           {/* Home Button */}
           <Link href="/">
             <a>
@@ -87,6 +92,7 @@ export function Navbar() {
                 variant={isActive("/") ? "default" : "ghost"}
                 size="sm"
                 aria-label="Home"
+                className="border-r border-border rounded-r-none"
               >
                 <Home className="w-4 h-4" />
               </Button>
@@ -100,6 +106,7 @@ export function Navbar() {
                 variant={isActive("/code-editor") ? "default" : "ghost"}
                 size="sm"
                 aria-label="Code Editor"
+                className="border-r border-border rounded-none"
               >
                 <Terminal className="w-4 h-4" />
               </Button>
@@ -112,6 +119,7 @@ export function Navbar() {
             size="sm"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
+            className="rounded-l-none"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5" />
@@ -122,7 +130,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop Right Section (can add theme toggle, etc.) */}
-        <div className="hidden lg:flex lg:items-center lg:gap-4">
+        <div className="hidden lg:flex lg:items-center lg:gap-4 lg:pl-4 lg:border-l lg:border-border">
           <a
             href="https://github.com/Theekshana-info/MIT-ITE-Python"
             target="_blank"
