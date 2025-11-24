@@ -187,7 +187,7 @@ sys.stdout = StringIO()
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Code Examples Sidebar */}
-        <Card className="lg:col-span-1 order-2 lg:order-1">
+        <Card className="lg:col-span-1 order-1 lg:order-1">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-base sm:text-lg">Example Codes</CardTitle>
             <CardDescription className="text-xs sm:text-sm">Click to load an example</CardDescription>
@@ -209,7 +209,7 @@ sys.stdout = StringIO()
         </Card>
 
         {/* Editor and Output */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-6 order-1 lg:order-2">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6 order-2 lg:order-2">
           <Card>
             <CardHeader className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
