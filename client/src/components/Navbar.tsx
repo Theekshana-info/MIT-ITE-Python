@@ -45,8 +45,7 @@ export function Navbar() {
               <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary text-primary-foreground">
                 <Code2 className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <span className="hidden sm:inline">MIT ITE 1213</span>
-              <span className="sm:hidden">Python</span>
+              <span>MIT ITE 1213</span>
             </a>
           </Link>
         </div>
