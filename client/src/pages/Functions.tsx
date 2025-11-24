@@ -1,22 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { functionsContent } from "@/data/functions";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface FunctionsProps {
   searchQuery: string;
 }
 
 export default function Functions({ searchQuery }: FunctionsProps) {
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
     <div className="space-y-8">

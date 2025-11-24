@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Database, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Grid3x3, GitGraph, Trophy, BookOpen, ArrowRight } from "lucide-react";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface HomeProps {
   searchQuery: string;
@@ -88,17 +89,7 @@ export default function Home({ searchQuery }: HomeProps) {
       )
     : topics;
 
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
     <div className="space-y-8">

@@ -1,22 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { arraysContent } from "@/data/arrays";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface ArraysProps {
   searchQuery: string;
 }
 
 export default function Arrays({ searchQuery }: ArraysProps) {
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
     <div className="space-y-8">

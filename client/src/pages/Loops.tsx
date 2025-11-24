@@ -1,22 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loopsContent } from "@/data/loops";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface LoopsProps {
   searchQuery: string;
 }
 
 export default function Loops({ searchQuery }: LoopsProps) {
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
     <div className="space-y-8">

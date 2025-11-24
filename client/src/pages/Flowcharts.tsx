@@ -1,23 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { flowchartsContent } from "@/data/flowcharts";
 import { FlowchartDiagram } from "@/components/FlowchartDiagram";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface FlowchartsProps {
   searchQuery: string;
 }
 
 export default function Flowcharts({ searchQuery }: FlowchartsProps) {
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
     <div className="space-y-8">

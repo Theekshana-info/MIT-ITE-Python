@@ -4,6 +4,7 @@ import { useState } from "react";
 import { QuizComponent } from "@/components/QuizComponent";
 import { quizQuestions, bigMixedQuiz } from "@/data/quizzes";
 import { Button } from "@/components/ui/button";
+import { highlightSearchText } from "@/lib/searchUtils";
 
 interface ActivitiesProps {
   searchQuery: string;
@@ -11,18 +12,7 @@ interface ActivitiesProps {
 
 export default function Activities({ searchQuery }: ActivitiesProps) {
   const [activeQuiz, setActiveQuiz] = useState<string | null>(null);
-
-  const highlightText = (text: string) => {
-    if (!searchQuery) return text;
-    const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
-    return parts.map((part, i) =>
-      part.toLowerCase() === searchQuery.toLowerCase() ? (
-        <mark key={i} className="search-highlight">{part}</mark>
-      ) : (
-        part
-      )
-    );
-  };
+  const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   const topics = [
     { 
