@@ -27,10 +27,8 @@ export function Navbar() {
   // Desktop navigation (all links)
   const desktopNavLinks = navLinks;
 
-  // Mobile navigation (exclude Home and Code Editor from hamburger menu)
-  const mobileMenuLinks = navLinks.filter(
-    link => link.href !== "/" && link.href !== "/code-editor"
-  );
+  // Mobile navigation - all links in hamburger menu
+  const mobileMenuLinks = navLinks;
 
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
