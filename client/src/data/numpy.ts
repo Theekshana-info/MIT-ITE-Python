@@ -111,42 +111,156 @@ Matrix Product:
     {
       id: "numpy-ex-1",
       question: "Create an integer array with numbers from 1 to 10. Remove all even numbers.",
-      hint: "Use array.remove() in a loop"
+      hint: "Use array.remove() in a loop",
+      solution: `import array
+
+numbers = array.array('i', range(1, 11))
+
+for value in list(numbers):
+    if value % 2 == 0:
+        numbers.remove(value)
+
+print(numbers)
+
+# Output:
+# array('i', [1, 3, 5, 7, 9])`
     },
     {
       id: "numpy-ex-2",
       question: "Create an array [5, 10, 15, 20, 25]. Insert 100 at index 2.",
-      hint: "Use array.insert(index, value)"
+      hint: "Use array.insert(index, value)",
+      solution: `import array
+
+numbers = array.array('i', [5, 10, 15, 20, 25])
+numbers.insert(2, 100)
+print(numbers)
+
+# Output:
+# array('i', [5, 10, 100, 15, 20, 25])`
     },
     {
       id: "numpy-ex-3",
       question: "Write a program to check if a given number exists in the array.",
-      hint: "Use 'in' operator"
+      hint: "Use 'in' operator",
+      solution: `import array
+
+numbers = array.array('i', [2, 4, 6, 8, 10])
+target = int(input("Enter a number: "))
+
+if target in numbers:
+    print(f"{target} is in the array")
+else:
+    print(f"{target} is not in the array")
+
+# Example Output:
+# Enter a number: 6
+# 6 is in the array`
     },
     {
       id: "numpy-ex-4",
       question: "Given an array [2, 4, 6, 8, 10], compute the maximum and minimum manually (without using max() or min()).",
-      hint: "Loop through and keep track of largest and smallest"
+      hint: "Loop through and keep track of largest and smallest",
+      solution: `import array
+
+numbers = array.array('i', [2, 4, 6, 8, 10])
+
+minimum = numbers[0]
+maximum = numbers[0]
+
+for value in numbers:
+    if value < minimum:
+        minimum = value
+    if value > maximum:
+        maximum = value
+
+print("Minimum:", minimum)
+print("Maximum:", maximum)
+
+# Output:
+# Minimum: 2
+# Maximum: 10`
     },
     {
       id: "numpy-ex-5",
       question: "Create a 4×4 NumPy array filled with zeros, and set the diagonal elements to 1.",
-      hint: "Use np.zeros() and loop through diagonal indices"
+      hint: "Use np.zeros() and loop through diagonal indices",
+      solution: `import numpy as np
+
+matrix = np.zeros((4, 4), dtype=int)
+
+for i in range(4):
+    matrix[i, i] = 1
+
+print(matrix)
+
+# Output:
+# [[1 0 0 0]
+#  [0 1 0 0]
+#  [0 0 1 0]
+#  [0 0 0 1]]`
     },
     {
       id: "numpy-ex-6",
       question: "Create a 3×3 matrix, and calculate the sum of each row and sum of each column separately.",
-      hint: "Use np.sum() with axis parameter"
+      hint: "Use np.sum() with axis parameter",
+      solution: `import numpy as np
+
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+row_sums = np.sum(matrix, axis=1)
+col_sums = np.sum(matrix, axis=0)
+
+print("Row sums:", row_sums)
+print("Column sums:", col_sums)
+
+# Output:
+# Row sums: [ 6 15 24]
+# Column sums: [12 15 18]`
     },
     {
       id: "numpy-ex-7",
       question: "Create two 3×3 arrays and check if they are equal element-wise.",
-      hint: "Use np.array_equal() or == operator"
+      hint: "Use np.array_equal() or == operator",
+      solution: `import numpy as np
+
+a = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])
+
+b = np.array([[1, 2, 3],
+              [4, 0, 6],
+              [7, 8, 9]])
+
+comparison = a == b
+are_equal = np.array_equal(a, b)
+
+print("Element-wise comparison:\n", comparison)
+print("Arrays equal:", are_equal)
+
+# Output:
+# Element-wise comparison:
+#  [[ True  True  True]
+#   [ True False  True]
+#   [ True  True  True]]
+# Arrays equal: False`
     },
     {
       id: "numpy-ex-8",
       question: "Write a function that takes a list [2, 3, 5, 7] and returns a new NumPy array with each element cubed.",
-      hint: "Use np.array() and ** operator"
+      hint: "Use np.array() and ** operator",
+      solution: `import numpy as np
+
+def cube_elements(values):
+    array_values = np.array(values)
+    return array_values ** 3
+
+result = cube_elements([2, 3, 5, 7])
+print(result)
+
+# Output:
+# [  8  27 125 343]`
     }
   ]
 };

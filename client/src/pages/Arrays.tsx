@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { arraysContent } from "@/data/arrays";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface ArraysProps {
   searchQuery: string;
@@ -28,18 +29,14 @@ export default function Arrays({ searchQuery }: ArraysProps) {
             <p className="text-sm text-muted-foreground mb-3">
               {highlightText(arraysContent.introduction.withoutArrays.description)}
             </p>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{arraysContent.introduction.withoutArrays.code}</code>
-            </pre>
+            <CodeBlock code={arraysContent.introduction.withoutArrays.code} showLineNumbers />
           </div>
           <div>
             <h3 className="font-semibold mb-2">{arraysContent.introduction.withArrays.title}</h3>
             <p className="text-sm text-muted-foreground mb-3">
               {highlightText(arraysContent.introduction.withArrays.description)}
             </p>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{arraysContent.introduction.withArrays.code}</code>
-            </pre>
+            <CodeBlock code={arraysContent.introduction.withArrays.code} showLineNumbers />
           </div>
         </CardContent>
       </Card>
@@ -51,15 +48,11 @@ export default function Arrays({ searchQuery }: ArraysProps) {
             {operation.description && <CardDescription>{highlightText(operation.description)}</CardDescription>}
           </CardHeader>
           <CardContent className="space-y-4">
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{operation.code}</code>
-            </pre>
+            <CodeBlock code={operation.code} showLineNumbers />
             {operation.output && (
               <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
                 <p className="text-sm font-semibold mb-2">Output:</p>
-                <pre className="font-mono text-sm whitespace-pre">
-                  <code>{operation.output}</code>
-                </pre>
+                <CodeBlock code={operation.output} />
               </div>
             )}
           </CardContent>
@@ -96,14 +89,10 @@ export default function Arrays({ searchQuery }: ArraysProps) {
           </div>
           <div>
             <h3 className="font-semibold mb-3">Example Usage:</h3>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{arraysContent.methods.example.code}</code>
-            </pre>
+            <CodeBlock code={arraysContent.methods.example.code} showLineNumbers />
             <div className="p-4 rounded-lg border bg-primary/5 border-primary/20 mt-2">
               <p className="text-sm font-semibold mb-2">Output:</p>
-              <pre className="font-mono text-sm whitespace-pre">
-                <code>{arraysContent.methods.example.output}</code>
-              </pre>
+              <CodeBlock code={arraysContent.methods.example.output} />
             </div>
           </div>
         </CardContent>
@@ -117,10 +106,18 @@ export default function Arrays({ searchQuery }: ArraysProps) {
         <CardContent>
           <div className="space-y-3">
             {arraysContent.exercises.map((exercise, idx) => (
-              <div key={exercise.id} className="p-3 bg-card rounded-lg border">
+              <div key={exercise.id} className="p-3 bg-card rounded-lg border space-y-2">
                 <p className="text-sm text-foreground">
                   <span className="font-semibold">{idx + 1}.</span> {highlightText(exercise.question)}
                 </p>
+                {exercise.solution && (
+                  <details className="mt-1">
+                    <summary className="text-xs text-primary cursor-pointer hover:underline">
+                      Show Solution
+                    </summary>
+                    <CodeBlock code={exercise.solution} showLineNumbers className="mt-2" />
+                  </details>
+                )}
               </div>
             ))}
           </div>

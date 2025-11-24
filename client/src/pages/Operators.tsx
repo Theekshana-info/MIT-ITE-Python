@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { operatorsContent } from "@/data/operators";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface OperatorsProps {
   searchQuery: string;
@@ -63,6 +64,21 @@ export default function Operators({ searchQuery }: OperatorsProps) {
                 </tbody>
               </table>
             </div>
+            {category.exampleBlock && (
+              <div className="mt-6 space-y-3" data-testid={`example-${category.name.toLowerCase().replace(/\s/g, '-')}`}>
+                <h4 className="text-sm font-semibold text-muted-foreground">Example Code</h4>
+                <CodeBlock
+                  code={category.exampleBlock.codeLines.map(l => l.text).join("\n")}
+                  showLineNumbers
+                />
+                <div className="bg-primary/5 border border-primary/30 rounded-md p-3 text-sm font-mono">
+                  <div className="font-semibold mb-1 text-primary">Output</div>
+                  {category.exampleBlock.output.map((out, i) => (
+                    <div key={i} className="text-emerald-600">{out}</div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       ))}

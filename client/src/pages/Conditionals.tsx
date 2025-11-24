@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { conditionalsContent } from "@/data/conditionals";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface ConditionalsProps {
   searchQuery: string;
@@ -32,19 +33,15 @@ export default function Conditionals({ searchQuery }: ConditionalsProps) {
                 {example.title && (
                   <h3 className="text-lg font-semibold text-foreground">{highlightText(example.title)}</h3>
                 )}
-                {example.description && (
-                  <p className="text-sm text-muted-foreground">{highlightText(example.description)}</p>
+                {"description" in example && example.description && (
+                  <p className="text-sm text-muted-foreground">{highlightText((example as any).description)}</p>
                 )}
                 <div className="space-y-2">
-                  <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-                    <code>{example.code}</code>
-                  </pre>
+                  <CodeBlock code={example.code} showLineNumbers />
                   {example.output && (
-                    <div className={`p-4 rounded-lg border ${example.isError ? 'bg-destructive/10 border-destructive' : 'bg-primary/5 border-primary/20'}`}>
+                    <div className={`p-4 rounded-lg border ${(example as any).isError ? 'bg-destructive/10 border-destructive' : 'bg-primary/5 border-primary/20'}`}>
                       <p className="text-sm font-semibold mb-2">Output:</p>
-                      <pre className="font-mono text-sm">
-                        <code>{example.output}</code>
-                      </pre>
+                      <CodeBlock code={example.output} />
                     </div>
                   )}
                 </div>
@@ -67,6 +64,14 @@ export default function Conditionals({ searchQuery }: ConditionalsProps) {
                 <p className="text-sm text-foreground">{highlightText(exercise.question)}</p>
                 {exercise.hint && (
                   <p className="text-xs text-muted-foreground italic">Hint: {highlightText(exercise.hint)}</p>
+                )}
+                {exercise.solution && (
+                  <details className="mt-2">
+                    <summary className="text-xs text-primary cursor-pointer hover:underline">
+                      Show Solution
+                    </summary>
+                    <CodeBlock code={exercise.solution} showLineNumbers className="mt-2" />
+                  </details>
                 )}
               </div>
             ))}

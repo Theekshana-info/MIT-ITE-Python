@@ -1,6 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { flowchartsContent } from "@/data/flowcharts";
-import { FlowchartDiagram } from "@/components/FlowchartDiagram";
 import { highlightSearchText } from "@/lib/searchUtils";
 
 interface FlowchartsProps {
@@ -72,10 +71,13 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
 
             <div>
               <h3 className="font-semibold mb-4">Visual Flowchart:</h3>
-              <FlowchartDiagram
-                nodes={example.flowchart.nodes}
-                connections={example.flowchart.connections}
-              />
+              <div className="overflow-hidden rounded-lg border bg-card flex justify-center p-4">
+                <img
+                  src={example.imagePath}
+                  alt={example.imageAlt ?? example.title}
+                  className="mx-auto w-full max-w-xs h-auto"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -89,10 +91,24 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
         <CardContent>
           <div className="space-y-3">
             {flowchartsContent.exercises.map((exercise, idx) => (
-              <div key={exercise.id} className="p-3 bg-card rounded-lg border">
+              <div key={exercise.id} className="p-3 bg-card rounded-lg border space-y-2">
                 <p className="text-sm text-foreground">
                   <span className="font-semibold">{idx + 1}.</span> {highlightText(exercise.question)}
                 </p>
+                {exercise.solutionImage ? (
+                  <details className="mt-1">
+                    <summary className="text-xs text-primary cursor-pointer hover:underline">
+                      Show Solution
+                    </summary>
+                    <div className="mt-3 overflow-hidden rounded-lg border bg-muted/30 flex justify-center p-4">
+                      <img
+                        src={exercise.solutionImage.path}
+                        alt={exercise.solutionImage.alt}
+                        className="mx-auto w-full max-w-xs h-auto"
+                      />
+                    </div>
+                  </details>
+                ) : null}
               </div>
             ))}
           </div>

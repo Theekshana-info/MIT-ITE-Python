@@ -126,20 +126,179 @@ print(cars)  # []`,
   },
 
   exercises: [
-    { id: "arr-ex-1", question: "Create an array of fruits: 'Apple', 'Banana', 'Cherry'. Print the array." },
-    { id: "arr-ex-2", question: "Print the first and last fruit from the array." },
-    { id: "arr-ex-3", question: "Change 'Banana' to 'Mango'." },
-    { id: "arr-ex-4", question: "Find out how many fruits are in the array." },
-    { id: "arr-ex-5", question: "Print each fruit one by one using a loop." },
-    { id: "arr-ex-6", question: "Add 'Orange' to the array." },
-    { id: "arr-ex-7", question: "Insert 'Grapes' at index 1." },
-    { id: "arr-ex-8", question: "Create an array of numbers [10, 45, 2, 99, 7] and print the largest number." },
-    { id: "arr-ex-9", question: "Find the sum of [5, 10, 15, 20]." },
-    { id: "arr-ex-10", question: "Ask the user to enter a car name, and check if it exists in the array." },
-    { id: "arr-ex-11", question: "Write a function print_numbers(nums) that prints each number in a list." },
-    { id: "arr-ex-12", question: "Write a function add_all(nums) that adds all numbers in a list and prints the total." },
-    { id: "arr-ex-13", question: "Write a function first_last(items) that prints the first and last elements of a list." },
-    { id: "arr-ex-14", question: "Write a function greet(names) that prints 'Hello <name>' for each name in the list." },
-    { id: "arr-ex-15", question: "Create a list of your 3 favorite foods and print them one by one." }
+    {
+      id: "arr-ex-1",
+      question: "Create an array of fruits: 'Apple', 'Banana', 'Cherry'. Print the array.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+print(fruits)
+
+# Output:
+# ['Apple', 'Banana', 'Cherry']`
+    },
+    {
+      id: "arr-ex-2",
+      question: "Print the first and last fruit from the array.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+print(fruits[0])
+print(fruits[-1])
+
+# Output:
+# Apple
+# Cherry`
+    },
+    {
+      id: "arr-ex-3",
+      question: "Change 'Banana' to 'Mango'.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+fruits[1] = "Mango"
+print(fruits)
+
+# Output:
+# ['Apple', 'Mango', 'Cherry']`
+    },
+    {
+      id: "arr-ex-4",
+      question: "Find out how many fruits are in the array.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+print(len(fruits))
+
+# Output:
+# 3`
+    },
+    {
+      id: "arr-ex-5",
+      question: "Print each fruit one by one using a loop.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+for fruit in fruits:
+    print(fruit)
+
+# Output:
+# Apple
+# Banana
+# Cherry`
+    },
+    {
+      id: "arr-ex-6",
+      question: "Add 'Orange' to the array.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+fruits.append("Orange")
+print(fruits)
+
+# Output:
+# ['Apple', 'Banana', 'Cherry', 'Orange']`
+    },
+    {
+      id: "arr-ex-7",
+      question: "Insert 'Grapes' at index 1.",
+      solution: `fruits = ["Apple", "Banana", "Cherry"]
+fruits.insert(1, "Grapes")
+print(fruits)
+
+# Output:
+# ['Apple', 'Grapes', 'Banana', 'Cherry']`
+    },
+    {
+      id: "arr-ex-8",
+      question: "Create an array of numbers [10, 45, 2, 99, 7] and print the largest number.",
+      solution: `numbers = [10, 45, 2, 99, 7]
+largest = max(numbers)
+print(largest)
+
+# Output:
+# 99`
+    },
+    {
+      id: "arr-ex-9",
+      question: "Find the sum of [5, 10, 15, 20].",
+      solution: `numbers = [5, 10, 15, 20]
+total = sum(numbers)
+print(total)
+
+# Output:
+# 50`
+    },
+    {
+      id: "arr-ex-10",
+      question: "Ask the user to enter a car name, and check if it exists in the array.",
+      solution: `cars = ["Tesla", "Toyota", "Ford", "BMW"]
+search = input("Enter a car name: ")
+
+if search in cars:
+    print(f"{search} is in the list.")
+else:
+    print(f"{search} is not in the list.")
+
+# Example Output:
+# Enter a car name: Ford
+# Ford is in the list.`
+    },
+    {
+      id: "arr-ex-11",
+      question: "Write a function print_numbers(nums) that prints each number in a list.",
+      solution: `def print_numbers(nums):
+    for num in nums:
+        print(num)
+
+print_numbers([3, 6, 9])
+
+# Output:
+# 3
+# 6
+# 9`
+    },
+    {
+      id: "arr-ex-12",
+      question: "Write a function add_all(nums) that adds all numbers in a list and prints the total.",
+      solution: `def add_all(nums):
+    total = sum(nums)
+    print(total)
+
+add_all([5, 10, 15])
+
+# Output:
+# 30`
+    },
+    {
+      id: "arr-ex-13",
+      question: "Write a function first_last(items) that prints the first and last elements of a list.",
+      solution: `def first_last(items):
+    if not items:
+        print("List is empty")
+        return
+    print(items[0])
+    print(items[-1])
+
+first_last(["red", "green", "blue"])
+
+# Output:
+# red
+# blue`
+    },
+    {
+      id: "arr-ex-14",
+      question: "Write a function greet(names) that prints 'Hello <name>' for each name in the list.",
+      solution: `def greet(names):
+    for name in names:
+        print(f"Hello {name}")
+
+greet(["Ana", "Ben", "Cara"])
+
+# Output:
+# Hello Ana
+# Hello Ben
+# Hello Cara`
+    },
+    {
+      id: "arr-ex-15",
+      question: "Create a list of your 3 favorite foods and print them one by one.",
+      solution: `foods = ["Pizza", "Sushi", "Tacos"]
+for food in foods:
+    print(food)
+
+# Output:
+# Pizza
+# Sushi
+# Tacos`
+    }
   ]
 };

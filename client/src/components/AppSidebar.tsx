@@ -43,13 +43,13 @@ export function AppSidebar({ onSearch, searchQuery, currentPath }: AppSidebarPro
       <SidebarHeader className="p-6 pb-4">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold text-primary" data-testid="text-app-title">
-            Python Learning Hub
+            MIT/ITE-Fundamentals of Programming
           </h1>
           <p className="text-sm text-muted-foreground" data-testid="text-app-subtitle">
-            Simple notes, examples, and games
+            MIT/ITE 1213
           </p>
         </div>
-        <div className="mt-4 relative">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"

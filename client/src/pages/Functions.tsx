@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { functionsContent } from "@/data/functions";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface FunctionsProps {
   searchQuery: string;
@@ -27,15 +28,11 @@ export default function Functions({ searchQuery }: FunctionsProps) {
             <CardDescription>{highlightText(concept.description)}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{concept.code}</code>
-            </pre>
+            <CodeBlock code={concept.code} showLineNumbers />
             {concept.output && (
               <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
                 <p className="text-sm font-semibold mb-2">Output:</p>
-                <pre className="font-mono text-sm whitespace-pre">
-                  <code>{concept.output}</code>
-                </pre>
+                <CodeBlock code={concept.output} />
               </div>
             )}
           </CardContent>
@@ -61,9 +58,7 @@ export default function Functions({ searchQuery }: FunctionsProps) {
                     <summary className="text-xs text-primary cursor-pointer hover:underline">
                       Show Solution
                     </summary>
-                    <pre className="bg-muted p-3 rounded-md overflow-x-auto font-mono text-xs mt-2">
-                      <code>{exercise.solution}</code>
-                    </pre>
+                    <CodeBlock code={exercise.solution} showLineNumbers className="mt-2" />
                   </details>
                 )}
               </div>

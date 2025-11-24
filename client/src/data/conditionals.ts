@@ -143,17 +143,48 @@ match day:
     {
       id: "cond-ex-1",
       question: "Write a program that asks the user for their age. If the age is less than 13, print 'Child'. If it is between 13 and 19, print 'Teenager'. Otherwise, print 'Adult'.",
-      hint: "Use if, elif, and else statements"
+      hint: "Use if, elif, and else statements",
+      solution: `age = int(input("Enter your age: "))
+
+if age < 13:
+    print("Child")
+elif age <= 19:
+    print("Teenager")
+else:
+    print("Adult")`
     },
     {
       id: "cond-ex-2",
       question: "Ask the user to enter the temperature in Celsius. If it is less than 15, print 'Cold'. If it is between 15 and 25, print 'Warm'. Otherwise, print 'Hot'.",
-      hint: "Use comparison operators with if/elif/else"
+      hint: "Use comparison operators with if/elif/else",
+      solution: `temperature = float(input("Enter the temperature in Celsius: "))
+
+if temperature < 15:
+    print("Cold")
+elif temperature <= 25:
+    print("Warm")
+else:
+    print("Hot")`
     },
     {
       id: "cond-ex-3",
       question: "Write a program that asks for a numerical score (0-100) and uses match statement to determine the letter grade: 90-100→A, 80-89→B, 70-79→C, 60-69→D, Below 60→F",
-      hint: "Use match statement with score ranges"
+      hint: "Use match statement with score ranges",
+      solution: `score = int(input("Enter the score (0-100): "))
+
+match score:
+    case _ if 90 <= score <= 100:
+        print("A")
+    case _ if 80 <= score <= 89:
+        print("B")
+    case _ if 70 <= score <= 79:
+        print("C")
+    case _ if 60 <= score <= 69:
+        print("D")
+    case _ if 0 <= score < 60:
+        print("F")
+    case _:
+        print("Invalid score")`
     }
   ]
 };

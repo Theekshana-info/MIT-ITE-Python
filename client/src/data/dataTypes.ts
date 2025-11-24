@@ -57,6 +57,60 @@ print(type(x))`,
     }
   ],
 
+  // Concise examples for each built-in data type
+  typeExamples: [
+    {
+      name: "str",
+      title: "String (str)",
+      code: `x = "Hello, World!"\nprint(x)                  # Hello, World!\nprint(type(x))            # <class 'str'>\nprint(x.upper())          # HELLO, WORLD!`
+    },
+    {
+      name: "int",
+      title: "Integer (int)",
+      code: `x = 42\nprint(x + 8)              # 50\nprint(type(x))            # <class 'int'>`
+    },
+    {
+      name: "float",
+      title: "Float (float)",
+      code: `x = 3.14\nprint(x * 2)              # 6.28\nprint(type(x))            # <class 'float'>`
+    },
+    {
+      name: "complex",
+      title: "Complex (complex)",
+      code: `z = 2 + 3j\nprint(z.real, z.imag)     # 2.0 3.0\nprint(type(z))            # <class 'complex'>`
+    },
+    {
+      name: "list",
+      title: "List (list)",
+      code: `nums = [1, 2, 3]\nnums.append(4)\nprint(nums[0], nums)      # 1 [1, 2, 3, 4]\nprint(type(nums))         # <class 'list'>`
+    },
+    {
+      name: "tuple",
+      title: "Tuple (tuple)",
+      code: `coords = (10, 20)\nprint(coords[1])          # 20\nprint(type(coords))       # <class 'tuple'>`
+    },
+    {
+      name: "range",
+      title: "Range (range)",
+      code: `r = range(1, 5)\nprint(list(r))            # [1, 2, 3, 4]\nprint(type(r))            # <class 'range'>`
+    },
+    {
+      name: "dict",
+      title: "Dictionary (dict)",
+      code: `person = {"name": "Alice", "age": 30}\nprint(person["name"])     # Alice\nprint(type(person))       # <class 'dict'>`
+    },
+    {
+      name: "set",
+      title: "Set (set)",
+      code: `fruits = {"apple", "banana", "apple"}\nprint(fruits)             # {'apple', 'banana'} (order may vary)\nprint(type(fruits))       # <class 'set'>`
+    },
+    {
+      name: "bool",
+      title: "Boolean (bool)",
+      code: `x = True\nprint(5 > 3, x)           # True True\nprint(type(x))            # <class 'bool'>`
+    }
+  ],
+
   collections: {
     title: "Collection Data Types",
     description: "There are four collection data types in Python:",

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loopsContent } from "@/data/loops";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface LoopsProps {
   searchQuery: string;
@@ -36,15 +37,11 @@ export default function Loops({ searchQuery }: LoopsProps) {
                   <p className="text-sm text-muted-foreground">{highlightText(example.description)}</p>
                 )}
                 <div className="space-y-2">
-                  <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-                    <code>{example.code}</code>
-                  </pre>
+                  <CodeBlock code={example.code} showLineNumbers />
                   {example.output && (
                     <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
                       <p className="text-sm font-semibold mb-2">Output:</p>
-                      <pre className="font-mono text-sm whitespace-pre">
-                        <code>{example.output}</code>
-                      </pre>
+                      <CodeBlock code={example.output} />
                     </div>
                   )}
                 </div>
@@ -70,9 +67,7 @@ export default function Loops({ searchQuery }: LoopsProps) {
                     <summary className="text-xs text-primary cursor-pointer hover:underline">
                       Show Solution
                     </summary>
-                    <pre className="bg-muted p-3 rounded-md overflow-x-auto font-mono text-xs mt-2">
-                      <code>{exercise.solution}</code>
-                    </pre>
+                    <CodeBlock code={exercise.solution} showLineNumbers className="mt-2" />
                   </details>
                 )}
               </div>

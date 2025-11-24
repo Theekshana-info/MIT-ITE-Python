@@ -95,7 +95,7 @@ export default function Home({ searchQuery }: HomeProps) {
     <div className="space-y-8">
       <div className="space-y-4">
         <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
-          Welcome to Python Learning Hub
+          Welcome to MIT/ITE-Fundamentals of Programming
         </h1>
         <p className="text-lg text-muted-foreground" data-testid="text-page-description">
           Master Python programming through simple explanations, practical examples, and interactive exercises.

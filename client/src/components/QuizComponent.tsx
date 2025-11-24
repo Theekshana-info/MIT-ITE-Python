@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { QuizQuestion } from "@/data/quizzes";
+import { CodeBlock } from "@/components/ui/code-block";
 import { CheckCircle2, XCircle, Award, RotateCcw } from "lucide-react";
 
 interface QuizComponentProps {
@@ -114,6 +115,11 @@ export function QuizComponent({ title, description, questions }: QuizComponentPr
         <CardTitle className="text-xl" data-testid="text-question">
           {question.question}
         </CardTitle>
+        {question.code && (
+          <div className="mt-4" data-testid="question-code-block">
+            <CodeBlock code={question.code} language="python" />
+          </div>
+        )}
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-3">

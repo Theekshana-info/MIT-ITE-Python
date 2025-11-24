@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { numpyContent } from "@/data/numpy";
 import { highlightSearchText } from "@/lib/searchUtils";
+import CodeBlock from "@/components/ui/code-block";
 
 interface NumPyProps {
   searchQuery: string;
@@ -28,15 +29,11 @@ export default function NumPy({ searchQuery }: NumPyProps) {
               {example.title && (
                 <h3 className="text-lg font-semibold text-foreground">{highlightText(example.title)}</h3>
               )}
-              <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-                <code>{example.code}</code>
-              </pre>
+              <CodeBlock code={example.code} showLineNumbers />
               {example.output && (
                 <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
                   <p className="text-sm font-semibold mb-2">Output:</p>
-                  <pre className="font-mono text-sm whitespace-pre">
-                    <code>{example.output}</code>
-                  </pre>
+                  <CodeBlock code={example.output} />
                 </div>
               )}
             </div>
@@ -52,53 +49,37 @@ export default function NumPy({ searchQuery }: NumPyProps) {
         <CardContent className="space-y-6">
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground">{numpyContent.multiDimensional.basics.title}</h3>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{numpyContent.multiDimensional.basics.code}</code>
-            </pre>
+            <CodeBlock code={numpyContent.multiDimensional.basics.code} showLineNumbers />
             <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
               <p className="text-sm font-semibold mb-2">Output:</p>
-              <pre className="font-mono text-sm whitespace-pre">
-                <code>{numpyContent.multiDimensional.basics.output}</code>
-              </pre>
+              <CodeBlock code={numpyContent.multiDimensional.basics.output} />
             </div>
           </div>
 
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground">{numpyContent.multiDimensional.accessing.title}</h3>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{numpyContent.multiDimensional.accessing.code}</code>
-            </pre>
+            <CodeBlock code={numpyContent.multiDimensional.accessing.code} showLineNumbers />
             <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
               <p className="text-sm font-semibold mb-2">Output:</p>
-              <pre className="font-mono text-sm whitespace-pre">
-                <code>{numpyContent.multiDimensional.accessing.output}</code>
-              </pre>
+              <CodeBlock code={numpyContent.multiDimensional.accessing.output} />
             </div>
           </div>
 
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground">{numpyContent.multiDimensional.slicing.title}</h3>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{numpyContent.multiDimensional.slicing.code}</code>
-            </pre>
+            <CodeBlock code={numpyContent.multiDimensional.slicing.code} showLineNumbers />
             <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
               <p className="text-sm font-semibold mb-2">Output:</p>
-              <pre className="font-mono text-sm whitespace-pre">
-                <code>{numpyContent.multiDimensional.slicing.output}</code>
-              </pre>
+              <CodeBlock code={numpyContent.multiDimensional.slicing.output} />
             </div>
           </div>
 
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground">{numpyContent.multiDimensional.operations.title}</h3>
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto font-mono text-sm">
-              <code>{numpyContent.multiDimensional.operations.code}</code>
-            </pre>
+            <CodeBlock code={numpyContent.multiDimensional.operations.code} showLineNumbers />
             <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
               <p className="text-sm font-semibold mb-2">Output:</p>
-              <pre className="font-mono text-sm whitespace-pre">
-                <code>{numpyContent.multiDimensional.operations.output}</code>
-              </pre>
+              <CodeBlock code={numpyContent.multiDimensional.operations.output} />
             </div>
           </div>
         </CardContent>
@@ -118,6 +99,14 @@ export default function NumPy({ searchQuery }: NumPyProps) {
                 </p>
                 {exercise.hint && (
                   <p className="text-xs text-muted-foreground italic">Hint: {highlightText(exercise.hint)}</p>
+                )}
+                {exercise.solution && (
+                  <details className="mt-1">
+                    <summary className="text-xs text-primary cursor-pointer hover:underline">
+                      Show Solution
+                    </summary>
+                    <CodeBlock code={exercise.solution} showLineNumbers className="mt-2" />
+                  </details>
                 )}
               </div>
             ))}
