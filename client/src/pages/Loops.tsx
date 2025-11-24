@@ -11,36 +11,36 @@ export default function Loops({ searchQuery }: LoopsProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight" data-testid="text-page-title">
           {highlightText(loopsContent.title)}
         </h1>
-        <p className="text-lg text-muted-foreground" data-testid="text-introduction">
+        <p className="text-base sm:text-lg text-muted-foreground" data-testid="text-introduction">
           {highlightText(loopsContent.introduction)}
         </p>
       </div>
 
       {loopsContent.types.map((type, idx) => (
         <Card key={idx} data-testid={`card-${type.name.toLowerCase().replace(/\s/g, '-')}`}>
-          <CardHeader>
-            <CardTitle>{highlightText(type.name)}</CardTitle>
-            <CardDescription>{highlightText(type.description)}</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">{highlightText(type.name)}</CardTitle>
+            <CardDescription className="text-sm">{highlightText(type.description)}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
             {type.examples.map((example, exIdx) => (
-              <div key={exIdx} className="space-y-3">
+              <div key={exIdx} className="space-y-2 sm:space-y-3">
                 {example.title && (
-                  <h3 className="text-lg font-semibold text-foreground">{highlightText(example.title)}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">{highlightText(example.title)}</h3>
                 )}
                 {example.description && (
-                  <p className="text-sm text-muted-foreground">{highlightText(example.description)}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{highlightText(example.description)}</p>
                 )}
                 <div className="space-y-2">
                   <CodeBlock code={example.code} showLineNumbers />
                   {example.output && (
-                    <div className="p-4 rounded-lg border bg-primary/5 border-primary/20">
-                      <p className="text-sm font-semibold mb-2">Output:</p>
+                    <div className="p-3 sm:p-4 rounded-lg border bg-primary/5 border-primary/20">
+                      <p className="text-xs sm:text-sm font-semibold mb-2">Output:</p>
                       <CodeBlock code={example.output} />
                     </div>
                   )}
@@ -52,12 +52,12 @@ export default function Loops({ searchQuery }: LoopsProps) {
       ))}
 
       <Card className="bg-accent/30">
-        <CardHeader>
-          <CardTitle>Practice Exercises</CardTitle>
-          <CardDescription>Try these exercises to master loops</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Practice Exercises</CardTitle>
+          <CardDescription className="text-sm">Try these exercises to master loops</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="space-y-3 sm:space-y-4">
             {loopsContent.exercises.map((exercise, idx) => (
               <div key={exercise.id} className="p-4 bg-card rounded-lg border space-y-2">
                 <h4 className="font-semibold text-foreground">Exercise {idx + 1}</h4>

@@ -10,41 +10,41 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight" data-testid="text-page-title">
           {highlightText(flowchartsContent.title)}
         </h1>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{highlightText(flowchartsContent.introduction.title)}</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">{highlightText(flowchartsContent.introduction.title)}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-foreground">{highlightText(flowchartsContent.introduction.description)}</p>
+        <CardContent className="p-4 sm:p-6">
+          <p className="text-sm sm:text-base text-foreground">{highlightText(flowchartsContent.introduction.description)}</p>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Flowchart Symbols</CardTitle>
-          <CardDescription>Learn the standard symbols used in flowcharts</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Flowchart Symbols</CardTitle>
+          <CardDescription className="text-sm">Learn the standard symbols used in flowcharts</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+        <CardContent className="p-4 sm:p-6">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 lg:grid-cols-2">
             {flowchartsContent.symbols.map((symbol, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-4 p-4 border rounded-lg bg-card"
+                className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 border rounded-lg bg-card"
                 data-testid={`symbol-${symbol.shape}`}
               >
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-3xl text-primary">
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-2xl sm:text-3xl text-primary">
                   {symbol.symbol}
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">{highlightText(symbol.name)}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{highlightText(symbol.description)}</p>
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground">{highlightText(symbol.name)}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">{highlightText(symbol.description)}</p>
                 </div>
               </div>
             ))}
@@ -54,15 +54,15 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
 
       {flowchartsContent.examples.map((example, idx) => (
         <Card key={idx}>
-          <CardHeader>
-            <CardTitle>{highlightText(example.title)}</CardTitle>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">{highlightText(example.title)}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
             <div>
-              <h3 className="font-semibold mb-3">Steps:</h3>
+              <h3 className="text-sm sm:text-base font-semibold mb-3">Steps:</h3>
               <ol className="list-decimal list-inside space-y-2">
                 {example.steps.map((step, stepIdx) => (
-                  <li key={stepIdx} className="text-sm text-foreground">
+                  <li key={stepIdx} className="text-xs sm:text-sm text-foreground">
                     {highlightText(step)}
                   </li>
                 ))}
@@ -70,8 +70,8 @@ export default function Flowcharts({ searchQuery }: FlowchartsProps) {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">Visual Flowchart:</h3>
-              <div className="overflow-hidden rounded-lg border bg-card flex justify-center p-4">
+              <h3 className="text-sm sm:text-base font-semibold mb-4">Visual Flowchart:</h3>
+              <div className="overflow-hidden rounded-lg border bg-card flex justify-center p-3 sm:p-4">
                 <img
                   src={example.imagePath}
                   alt={example.imageAlt ?? example.title}

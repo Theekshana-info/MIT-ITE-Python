@@ -134,15 +134,15 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Examples for Each Data Type (Interactive)</CardTitle>
-          <CardDescription>Quick Python snippets demonstrating basic usage of each type.</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Examples for Each Data Type (Interactive)</CardTitle>
+          <CardDescription className="text-sm">Quick Python snippets demonstrating basic usage of each type.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+        <CardContent className="p-4 sm:p-6">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 lg:grid-cols-2">
             {dataTypesContent.typeExamples?.map((ex, idx) => (
-              <div key={idx} className="space-y-2 p-4 rounded-lg border bg-card" data-testid={`datatype-example-${ex.name}`}>
-                <h3 className="text-sm font-semibold text-primary">{highlightText(ex.title)}</h3>
+              <div key={idx} className="space-y-2 p-3 sm:p-4 rounded-lg border bg-card" data-testid={`datatype-example-${ex.name}`}>
+                <h3 className="text-xs sm:text-sm font-semibold text-primary">{highlightText(ex.title)}</h3>
                 <CodeBlock code={ex.code} showLineNumbers />
               </div>
             ))}
@@ -150,8 +150,8 @@ export default function DataTypes({ searchQuery }: DataTypesProps) {
         </CardContent>
       </Card>
 
-      <div className="text-center pt-8">
-        <p className="text-sm text-muted-foreground">
+      <div className="text-center pt-6 sm:pt-8">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Continue to the next section to learn about{" "}
           <a href="/operators" className="text-primary hover:underline font-semibold" data-testid="link-next-section">
             Operators

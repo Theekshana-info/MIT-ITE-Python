@@ -83,16 +83,17 @@ export default function Activities({ searchQuery }: ActivitiesProps) {
 
   if (activeQuiz === "big-mixed") {
     return (
-      <div className="space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-foreground flex items-center gap-3" data-testid="text-page-title">
-            <Trophy className="h-10 w-10 text-primary" />
+      <div className="space-y-6 sm:space-y-8">
+        <div className="space-y-3 sm:space-y-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight" data-testid="text-page-title">
+            <Trophy className="h-8 w-8 sm:h-10 sm:w-10 text-primary flex-shrink-0" />
             Big Mixed Quiz
           </h1>
           <Button 
             variant="outline" 
             onClick={() => setActiveQuiz(null)}
             data-testid="button-back-to-quizzes"
+            className="w-full sm:w-auto"
           >
             ← Back to All Quizzes
           </Button>
@@ -111,16 +112,17 @@ export default function Activities({ searchQuery }: ActivitiesProps) {
     const topicQuestions = quizQuestions.filter(q => q.topic === topic?.topic);
     
     return (
-      <div className="space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-foreground flex items-center gap-3" data-testid="text-page-title">
-            {topic && <topic.icon className={`h-10 w-10 ${topic.color}`} />}
+      <div className="space-y-6 sm:space-y-8">
+        <div className="space-y-3 sm:space-y-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight" data-testid="text-page-title">
+            {topic && <topic.icon className={`h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 ${topic.color}`} />}
             {topic?.name}
           </h1>
           <Button 
             variant="outline" 
             onClick={() => setActiveQuiz(null)}
             data-testid="button-back-to-quizzes"
+            className="w-full sm:w-auto"
           >
             ← Back to All Quizzes
           </Button>
@@ -135,39 +137,40 @@ export default function Activities({ searchQuery }: ActivitiesProps) {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground flex items-center gap-3" data-testid="text-page-title">
-          <Trophy className="h-10 w-10 text-primary" />
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight" data-testid="text-page-title">
+          <Trophy className="h-8 w-8 sm:h-10 sm:w-10 text-primary flex-shrink-0" />
           {highlightText("Activities & Practice")}
         </h1>
-        <p className="text-lg text-muted-foreground" data-testid="text-page-description">
+        <p className="text-sm sm:text-base lg:text-lg text-muted-foreground" data-testid="text-page-description">
           Test your Python knowledge with interactive quizzes for each topic!
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {topics.map((topic) => (
           <Card key={topic.id} className="hover-elevate transition-all duration-200">
-            <CardHeader>
+            <CardHeader className="p-4 sm:p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <topic.icon className={`h-5 w-5 ${topic.color}`} />
+                  <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                    <topic.icon className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${topic.color}`} />
                     {highlightText(topic.name)}
                   </CardTitle>
-                  <CardDescription className="mt-2">
+                  <CardDescription className="mt-2 text-xs sm:text-sm">
                     {highlightText(topic.description)}
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6">
               <Button 
                 variant="default" 
                 size="sm" 
                 onClick={() => setActiveQuiz(topic.id)}
                 data-testid={`button-start-${topic.id}`}
+                className="w-full sm:w-auto"
               >
                 Start Quiz
               </Button>
@@ -177,12 +180,12 @@ export default function Activities({ searchQuery }: ActivitiesProps) {
       </div>
 
       <Card className="bg-accent/30">
-        <CardHeader>
-          <CardTitle>Big Mixed Quiz</CardTitle>
-          <CardDescription>Test your knowledge across all Python topics!</CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">Big Mixed Quiz</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">Test your knowledge across all Python topics!</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-foreground">
+        <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
+          <p className="text-sm sm:text-base text-foreground">
             The Big Mixed Quiz combines questions from all topics you've learned. It's the ultimate
             challenge to see how well you understand Python fundamentals!
           </p>
@@ -191,6 +194,7 @@ export default function Activities({ searchQuery }: ActivitiesProps) {
             size="lg" 
             onClick={() => setActiveQuiz("big-mixed")}
             data-testid="button-start-big-quiz"
+            className="w-full sm:w-auto"
           >
             Start Big Quiz
           </Button>

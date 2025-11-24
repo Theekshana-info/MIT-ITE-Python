@@ -10,73 +10,73 @@ export default function Summary({ searchQuery }: SummaryProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold text-foreground flex items-center gap-3" data-testid="text-page-title">
-          <BookOpen className="h-10 w-10 text-primary" />
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight" data-testid="text-page-title">
+          <BookOpen className="h-8 w-8 sm:h-10 sm:w-10 text-primary flex-shrink-0" />
           {highlightText("Python Cheat Sheet")}
         </h1>
-        <p className="text-lg text-muted-foreground" data-testid="text-page-description">
+        <p className="text-base sm:text-lg text-muted-foreground" data-testid="text-page-description">
           Quick reference guide for all Python concepts covered in this tutorial
         </p>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Data Types</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Data Types</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">str</code>
-              <span className="text-sm text-muted-foreground ml-2">- Text/String</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">str</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Text/String</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">int</code>
-              <span className="text-sm text-muted-foreground ml-2">- Integer</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">int</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Integer</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">float</code>
-              <span className="text-sm text-muted-foreground ml-2">- Decimal number</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">float</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Decimal number</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">bool</code>
-              <span className="text-sm text-muted-foreground ml-2">- True/False</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">bool</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- True/False</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">list</code>
-              <span className="text-sm text-muted-foreground ml-2">- Ordered, changeable</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">list</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Ordered, changeable</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">tuple</code>
-              <span className="text-sm text-muted-foreground ml-2">- Ordered, unchangeable</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">tuple</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Ordered, unchangeable</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">dict</code>
-              <span className="text-sm text-muted-foreground ml-2">- Key-value pairs</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">dict</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Key-value pairs</span>
             </div>
             <div className="space-y-2">
-              <code className="text-sm font-mono bg-muted px-2 py-1 rounded">set</code>
-              <span className="text-sm text-muted-foreground ml-2">- Unique elements</span>
+              <code className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded">set</code>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-2">- Unique elements</span>
             </div>
           </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Operators</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Operators</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
           <div>
-            <h4 className="font-semibold mb-2">Arithmetic</h4>
-            <p className="text-sm font-mono text-muted-foreground">
+            <h4 className="text-sm sm:text-base font-semibold mb-2">Arithmetic</h4>
+            <p className="text-xs sm:text-sm font-mono text-muted-foreground">
               + - * / % ** //
             </p>
           </div>
           <div>
-            <h4 className="font-semibold mb-2">Comparison</h4>
-            <p className="text-sm font-mono text-muted-foreground">
+            <h4 className="text-sm sm:text-base font-semibold mb-2">Comparison</h4>
+            <p className="text-xs sm:text-sm font-mono text-muted-foreground">
               == != &gt; &lt; &gt;= &lt;=
             </p>
           </div>
