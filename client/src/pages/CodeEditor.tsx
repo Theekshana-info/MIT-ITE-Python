@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
+import Editor from "@monaco-editor/react";
 
 interface CodeEditorProps {
   searchQuery: string;
@@ -237,14 +238,26 @@ sys.stdout = StringIO()
               </div>
             </CardHeader>
             <CardContent className="p-4 sm:p-6">
-              <textarea
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                className="w-full h-64 sm:h-80 p-3 sm:p-4 font-mono text-xs sm:text-sm bg-muted rounded-lg border focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                placeholder="# Write your Python code here
-print('Hello, World!')"
-                spellCheck={false}
-              />
+              <div className="border rounded-lg overflow-hidden">
+                <Editor
+                  height="320px"
+                  defaultLanguage="python"
+                  value={code}
+                  onChange={(value) => setCode(value || "")}
+                  theme="vs-dark"
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    lineNumbers: "on",
+                    roundedSelection: true,
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    tabSize: 4,
+                    wordWrap: "on",
+                    padding: { top: 10, bottom: 10 },
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
 
