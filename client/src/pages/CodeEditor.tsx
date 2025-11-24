@@ -3,11 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
 
 interface CodeEditorProps {
   searchQuery: string;
+}
+
+// Declare pyodide types
+declare global {
+  interface Window {
+    loadPyodide: any;
+  }
 }
 
 const exampleCodes = [
@@ -72,30 +79,72 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState("");
+  const [pyodide, setPyodide] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load Pyodide on component mount
+  useEffect(() => {
+    const loadPyodideInstance = async () => {
+      try {
+        setIsLoading(true);
+        // Load Pyodide from CDN
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = async () => {
+          const pyodideInstance = await window.loadPyodide({
+            indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',
+          });
+          setPyodide(pyodideInstance);
+          setIsLoading(false);
+        };
+
+        script.onerror = () => {
+          setError("Failed to load Python interpreter. Please refresh the page.");
+          setIsLoading(false);
+        };
+      } catch (err) {
+        setError("Failed to initialize Python interpreter.");
+        setIsLoading(false);
+      }
+    };
+
+    loadPyodideInstance();
+  }, []);
 
   const runCode = async () => {
+    if (!pyodide) {
+      setError("Python interpreter is not ready yet. Please wait...");
+      return;
+    }
+
     setIsRunning(true);
     setOutput("");
     setError("");
 
     try {
-      // Using Skulpt - A Python interpreter in JavaScript
-      const response = await fetch('https://api.replicate.com/v1/predictions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code: code,
-        }),
-      });
+      // Redirect stdout to capture print statements
+      await pyodide.runPythonAsync(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+      `);
 
-      // For now, we'll use a client-side approach with Pyodide
-      // This is a placeholder - we'll implement actual execution
-      setOutput("Note: This feature requires a Python execution backend.\n\nYour code:\n" + code);
+      // Run user code
+      await pyodide.runPythonAsync(code);
+
+      // Get the output
+      const stdout = await pyodide.runPythonAsync("sys.stdout.getvalue()");
       
-    } catch (err) {
-      setError("Error executing code. Please check your syntax.");
+      if (stdout) {
+        setOutput(stdout);
+      } else {
+        setOutput("Code executed successfully (no output)");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred while running your code");
     } finally {
       setIsRunning(false);
     }
@@ -128,8 +177,10 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
       <Alert>
         <Info className="h-4 w-4" />
         <AlertDescription className="text-xs sm:text-sm">
-          This is an interactive Python editor. Write your code below and click "Run Code" to see the output.
-          Try the example codes to get started!
+          {isLoading 
+            ? "Loading Python interpreter... Please wait."
+            : "Python interpreter ready! Write your code below and click 'Run Code' to see the output. Try the example codes to get started!"
+          }
         </AlertDescription>
       </Alert>
 
@@ -176,11 +227,11 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
                     variant="default"
                     size="sm"
                     onClick={runCode}
-                    disabled={isRunning || !code.trim()}
+                    disabled={isRunning || !code.trim() || isLoading}
                     className="flex-1 sm:flex-none"
                   >
                     <Play className="w-4 h-4 mr-2" />
-                    {isRunning ? "Running..." : "Run Code"}
+                    {isRunning ? "Running..." : isLoading ? "Loading..." : "Run Code"}
                   </Button>
                 </div>
               </div>
