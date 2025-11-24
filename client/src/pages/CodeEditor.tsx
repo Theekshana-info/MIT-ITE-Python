@@ -185,9 +185,9 @@ sys.stdout = StringIO()
         </AlertDescription>
       </Alert>
 
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Code Examples Sidebar */}
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-1 order-2 lg:order-1">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-base sm:text-lg">Example Codes</CardTitle>
             <CardDescription className="text-xs sm:text-sm">Click to load an example</CardDescription>
@@ -198,7 +198,7 @@ sys.stdout = StringIO()
                 <Button
                   key={idx}
                   variant="outline"
-                  className="w-full justify-start text-left text-sm"
+                  className="w-full justify-start text-left text-xs sm:text-sm"
                   onClick={() => loadExample(example)}
                 >
                   {example.name}
@@ -209,7 +209,7 @@ sys.stdout = StringIO()
         </Card>
 
         {/* Editor and Output */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6 order-1 lg:order-2">
           <Card>
             <CardHeader className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -237,24 +237,28 @@ sys.stdout = StringIO()
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6">
+            <CardContent className="p-2 sm:p-4 lg:p-6">
               <div className="border rounded-lg overflow-hidden">
                 <Editor
-                  height="320px"
+                  height="300px"
                   defaultLanguage="python"
                   value={code}
                   onChange={(value) => setCode(value || "")}
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
-                    fontSize: 14,
+                    fontSize: 12,
                     lineNumbers: "on",
                     roundedSelection: true,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
                     tabSize: 4,
                     wordWrap: "on",
-                    padding: { top: 10, bottom: 10 },
+                    padding: { top: 8, bottom: 8 },
+                    scrollbar: {
+                      vertical: 'auto',
+                      horizontal: 'auto',
+                    },
                   }}
                 />
               </div>
@@ -263,8 +267,8 @@ sys.stdout = StringIO()
 
           <Card>
             <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                Output
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2 flex-wrap">
+                <span>Output</span>
                 {output && !error && <CheckCircle2 className="w-4 h-4 text-green-600" />}
                 {error && <XCircle className="w-4 h-4 text-red-600" />}
               </CardTitle>
@@ -273,10 +277,10 @@ sys.stdout = StringIO()
               {error ? (
                 <Alert variant="destructive">
                   <XCircle className="h-4 w-4" />
-                  <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
+                  <AlertDescription className="text-xs sm:text-sm break-words">{error}</AlertDescription>
                 </Alert>
               ) : (
-                <pre className="w-full min-h-32 sm:min-h-40 p-3 sm:p-4 font-mono text-xs sm:text-sm bg-muted rounded-lg border overflow-x-auto whitespace-pre-wrap">
+                <pre className="w-full min-h-32 sm:min-h-40 p-3 sm:p-4 font-mono text-xs sm:text-sm bg-muted rounded-lg border overflow-x-auto whitespace-pre-wrap break-words">
                   {output || "// Output will appear here after running your code"}
                 </pre>
               )}
