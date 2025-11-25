@@ -17,7 +17,6 @@ export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enable
     }
 
     let scrollElement: HTMLElement | null = null;
-    let originalTouchAction: string | null = null;
     let rafId: number | null = null;
     let lastY = 0;
 
@@ -59,12 +58,8 @@ export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enable
       if (scrollElement) {
         scrollElement.removeEventListener("touchstart", handleTouchStart);
         scrollElement.removeEventListener("touchmove", handleTouchMove);
-        if (originalTouchAction !== null) {
-          scrollElement.style.touchAction = originalTouchAction;
-        }
       }
       scrollElement = null;
-      originalTouchAction = null;
     };
 
     const attachListeners = () => {
@@ -75,9 +70,6 @@ export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enable
         rafId = window.requestAnimationFrame(attachListeners);
         return;
       }
-
-      originalTouchAction = scrollElement.style.touchAction;
-      scrollElement.style.touchAction = "none";
 
       scrollElement.addEventListener("touchstart", handleTouchStart, { passive: true });
       scrollElement.addEventListener("touchmove", handleTouchMove, { passive: false });
