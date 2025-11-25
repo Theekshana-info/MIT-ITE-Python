@@ -268,8 +268,9 @@ sys.stdout = StringIO()
                     tabCompletion: "off",
                     wordBasedSuggestions: "off",
                     parameterHints: { enabled: false },
-                    autoClosingBrackets: "never",
-                    autoClosingQuotes: "never",
+                    autoClosingBrackets: "always",
+                    autoClosingQuotes: "always",
+                    autoClosingOvertype: "always",
                     formatOnPaste: false,
                     formatOnType: false,
                     // Better touch support
