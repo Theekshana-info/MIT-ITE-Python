@@ -247,18 +247,41 @@ sys.stdout = StringIO()
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
-                    fontSize: 12,
+                    fontSize: 14,
                     lineNumbers: "on",
                     roundedSelection: true,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
                     tabSize: 4,
                     wordWrap: "on",
-                    padding: { top: 8, bottom: 8 },
+                    padding: { top: 10, bottom: 10 },
                     scrollbar: {
                       vertical: 'auto',
                       horizontal: 'auto',
+                      verticalScrollbarSize: 14,
+                      horizontalScrollbarSize: 14,
                     },
+                    // Mobile-friendly settings
+                    quickSuggestions: false,
+                    suggestOnTriggerCharacters: false,
+                    acceptSuggestionOnEnter: "off",
+                    tabCompletion: "off",
+                    wordBasedSuggestions: "off",
+                    parameterHints: { enabled: false },
+                    autoClosingBrackets: "never",
+                    autoClosingQuotes: "never",
+                    formatOnPaste: false,
+                    formatOnType: false,
+                    // Better touch support
+                    selectOnLineNumbers: false,
+                    glyphMargin: false,
+                    folding: false,
+                    lineDecorationsWidth: 0,
+                    lineNumbersMinChars: 3,
+                    renderLineHighlight: "all",
+                    smoothScrolling: true,
+                    cursorBlinking: "smooth",
+                    cursorWidth: 2,
                   }}
                 />
               </div>
