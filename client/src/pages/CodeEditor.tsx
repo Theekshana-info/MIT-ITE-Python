@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
 import Editor from "@monaco-editor/react";
 
@@ -82,6 +82,7 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
   const [error, setError] = useState("");
   const [pyodide, setPyodide] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const editorWrapperRef = useRef<HTMLDivElement>(null);
 
   // Load Pyodide on component mount
   useEffect(() => {
@@ -238,7 +239,14 @@ sys.stdout = StringIO()
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 lg:p-6">
-              <div className="border rounded-lg overflow-hidden">
+              <div 
+                ref={editorWrapperRef}
+                className="border rounded-lg overflow-hidden"
+                style={{ 
+                  overflowY: code.split('\n').length > 12 ? 'auto' : 'visible',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
                 <Editor
                   height="300px"
                   defaultLanguage="python"

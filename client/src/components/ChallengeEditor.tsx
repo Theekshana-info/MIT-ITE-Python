@@ -4,7 +4,7 @@
  * Works with any CodingChallenge object
  */
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -42,6 +42,8 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const [solutionOutput, setSolutionOutput] = useState("");
   const [solutionError, setSolutionError] = useState("");
   const [isRunningSolution, setIsRunningSolution] = useState(false);
+  const codeEditorWrapperRef = useRef<HTMLDivElement>(null);
+  const solutionEditorWrapperRef = useRef<HTMLDivElement>(null);
 
   const handleRunCode = async () => {
     if (pyodideLoading) {
@@ -191,7 +193,14 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
               Loading Python engine...
             </div>
           ) : (
-            <div className="border rounded-lg overflow-hidden">
+            <div 
+              ref={codeEditorWrapperRef}
+              className="border rounded-lg overflow-hidden"
+              style={{ 
+                overflowY: code.split('\n').length > 14 ? 'auto' : 'visible',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
               <Editor
                 height="350px"
                 defaultLanguage="python"
@@ -320,7 +329,14 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
         </CardHeader>
         {showSolution && (
           <CardContent className="space-y-4">
-            <div className="border rounded-lg overflow-hidden">
+            <div 
+              ref={solutionEditorWrapperRef}
+              className="border rounded-lg overflow-hidden"
+              style={{ 
+                overflowY: challenge.solutionCode.split('\n').length > 12 ? 'auto' : 'visible',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
               <Editor
                 height="300px"
                 defaultLanguage="python"
