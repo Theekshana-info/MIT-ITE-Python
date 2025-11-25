@@ -145,11 +145,19 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
     try {
       let outputBuffer = '';
 
-      // Capture stdout
+      // Capture stdout with proper newline handling
       pyodide.setStdout({
         batched: (msg: string) => {
           outputBuffer += msg;
-        }
+        },
+        isatty: false
+      });
+
+      pyodide.setStderr({
+        batched: (msg: string) => {
+          outputBuffer += msg;
+        },
+        isatty: false
       });
 
       // Run the code
@@ -157,7 +165,7 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
 
       // If there's a return value (not None), add it to output
       if (result !== undefined && result !== null && typeof result !== 'object') {
-        outputBuffer += String(result) + '\n';
+        outputBuffer += (outputBuffer ? '\n' : '') + String(result);
       }
 
       // Update execution count
@@ -442,9 +450,8 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
                         <CheckCircle2 className="w-4 h-4 text-green-600" />
                         Output:
                       </div>
-                      <pre className="font-mono text-xs sm:text-sm text-foreground whitespace-pre-wrap break-words">
-                        {cell.output}
-                      </pre>
+                      <pre className="font-mono text-xs sm:text-sm text-foreground whitespace-pre break-words overflow-x-auto">
+{cell.output}</pre>
                     </div>
                   )}
                 </div>
