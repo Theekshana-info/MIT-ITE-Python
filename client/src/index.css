@@ -389,5 +389,19 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
   }
+
+  /* Monaco Editor mobile touch scroll support */
+  .monaco-editor .overflow-guard {
+    touch-action: pan-y !important;
+  }
+
+  .monaco-editor .monaco-scrollable-element {
+    touch-action: pan-y !important;
+  }
+
+  /* Allow page scroll when editor content is short */
+  .monaco-editor .view-lines {
+    touch-action: pan-y !important;
+  }
 }
 
