@@ -46,7 +46,7 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const codeEditorWrapperRef = useRef<HTMLDivElement>(null);
   const solutionEditorWrapperRef = useRef<HTMLDivElement>(null);
   useMobileEditorScroll(codeEditorWrapperRef);
-  useMobileEditorScroll(solutionEditorWrapperRef);
+  useMobileEditorScroll(solutionEditorWrapperRef, showSolution);
 
   const handleRunCode = async () => {
     if (pyodideLoading) {

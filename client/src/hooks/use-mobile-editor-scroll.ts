@@ -5,13 +5,20 @@ import { RefObject, useEffect } from "react";
  * Ensures the page scrolls when the editor content is shorter than its viewport, and
  * when the editor reaches its scroll boundaries.
  */
-export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>) {
+export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enabled = true) {
   useEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper || typeof window === "undefined") {
+    if (!enabled || typeof window === "undefined") {
       return;
     }
 
+    const wrapper = wrapperRef.current;
+    if (!wrapper) {
+      return;
+    }
+
+    let scrollElement: HTMLElement | null = null;
+    let originalTouchAction: string | null = null;
+    let rafId: number | null = null;
     let lastY = 0;
 
     const handleTouchStart = (event: TouchEvent) => {
@@ -22,42 +29,76 @@ export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>) {
     };
 
     const handleTouchMove = (event: TouchEvent) => {
-      if (event.touches.length !== 1) {
+      if (event.touches.length !== 1 || !scrollElement) {
         return;
       }
 
       const currentY = event.touches[0].clientY;
-      const deltaY = currentY - lastY;
+      const deltaY = lastY - currentY;
       lastY = currentY;
 
-      const scrollHeight = wrapper.scrollHeight;
-      const clientHeight = wrapper.clientHeight;
-      const scrollTop = wrapper.scrollTop;
+      const { scrollHeight, clientHeight, scrollTop } = scrollElement;
       const isScrollable = scrollHeight > clientHeight + 1;
 
       if (!isScrollable) {
-        // Editor content is shorter than viewport, forward scroll to page.
-        event.preventDefault();
-        window.scrollBy({ top: -deltaY, left: 0, behavior: "auto" });
+        return; // Let the page handle scrolling.
+      }
+
+      const atUpperBound = scrollTop <= 0 && deltaY < 0;
+      const atLowerBound = scrollTop + clientHeight >= scrollHeight - 1 && deltaY > 0;
+
+      if (atUpperBound || atLowerBound) {
+        return; // Allow the page to scroll when the editor hits its boundary.
+      }
+
+      event.preventDefault();
+      scrollElement.scrollTop += deltaY;
+    };
+
+    const detachListeners = () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener("touchstart", handleTouchStart);
+        scrollElement.removeEventListener("touchmove", handleTouchMove);
+        if (originalTouchAction !== null) {
+          scrollElement.style.touchAction = originalTouchAction;
+        }
+      }
+      scrollElement = null;
+      originalTouchAction = null;
+    };
+
+    const attachListeners = () => {
+      detachListeners();
+      scrollElement = wrapper.querySelector<HTMLElement>(".monaco-scrollable-element");
+
+      if (!scrollElement) {
+        rafId = window.requestAnimationFrame(attachListeners);
         return;
       }
 
-      const atTop = scrollTop <= 0;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      originalTouchAction = scrollElement.style.touchAction;
+      scrollElement.style.touchAction = "none";
 
-      if ((atTop && deltaY > 0) || (atBottom && deltaY < 0)) {
-        // Editor reached boundary; forward scroll to page.
-        event.preventDefault();
-        window.scrollBy({ top: -deltaY, left: 0, behavior: "auto" });
-      }
+      scrollElement.addEventListener("touchstart", handleTouchStart, { passive: true });
+      scrollElement.addEventListener("touchmove", handleTouchMove, { passive: false });
     };
 
-    wrapper.addEventListener("touchstart", handleTouchStart, { passive: true });
-    wrapper.addEventListener("touchmove", handleTouchMove, { passive: false });
+    attachListeners();
+
+    const observer = new MutationObserver(() => {
+      if (!scrollElement || !wrapper.contains(scrollElement)) {
+        attachListeners();
+      }
+    });
+
+    observer.observe(wrapper, { childList: true, subtree: true });
 
     return () => {
-      wrapper.removeEventListener("touchstart", handleTouchStart);
-      wrapper.removeEventListener("touchmove", handleTouchMove);
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      observer.disconnect();
+      detachListeners();
     };
-  });
+  }, [wrapperRef, enabled]);
 }
