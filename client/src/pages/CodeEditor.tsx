@@ -1,8 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-react";
+import { Code2, Play, Info, Plus, Trash2, CheckCircle2, XCircle, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
 import Editor from "@monaco-editor/react";
@@ -16,6 +15,15 @@ declare global {
   interface Window {
     loadPyodide: any;
   }
+}
+
+interface CodeCell {
+  id: string;
+  code: string;
+  output: string;
+  error: string;
+  isRunning: boolean;
+  executionCount: number | null;
 }
 
 const exampleCodes = [
@@ -76,10 +84,17 @@ print(f"5 + 3 = {result}")`,
 
 export default function CodeEditor({ searchQuery }: CodeEditorProps) {
   const highlightText = (text: string) => highlightSearchText(text, searchQuery);
-  const [code, setCode] = useState(exampleCodes[0].code);
-  const [output, setOutput] = useState("");
-  const [isRunning, setIsRunning] = useState(false);
-  const [error, setError] = useState("");
+  const [cells, setCells] = useState<CodeCell[]>([
+    {
+      id: Date.now().toString(),
+      code: '',
+      output: '',
+      error: '',
+      isRunning: false,
+      executionCount: null,
+    }
+  ]);
+  const [globalExecutionCount, setGlobalExecutionCount] = useState(0);
   const [pyodide, setPyodide] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -88,7 +103,6 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
     const loadPyodideInstance = async () => {
       try {
         setIsLoading(true);
-        // Load Pyodide from CDN
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
         script.async = true;
@@ -103,11 +117,11 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
         };
 
         script.onerror = () => {
-          setError("Failed to load Python interpreter. Please refresh the page.");
           setIsLoading(false);
+          alert('Failed to load Python interpreter. Please refresh the page.');
         };
-      } catch (err) {
-        setError("Failed to initialize Python interpreter.");
+      } catch (error) {
+        console.error('Error loading Pyodide:', error);
         setIsLoading(false);
       }
     };
@@ -115,63 +129,128 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
     loadPyodideInstance();
   }, []);
 
-  const runCode = async () => {
-    if (!pyodide) {
-      setError("Python interpreter is not ready yet. Please wait...");
-      return;
-    }
+  const runCell = async (cellId: string) => {
+    if (!pyodide || isLoading) return;
 
-    setIsRunning(true);
-    setOutput("");
-    setError("");
+    const cell = cells.find(c => c.id === cellId);
+    if (!cell || !cell.code.trim()) return;
+
+    // Update cell to running state
+    setCells(prevCells => prevCells.map(c => 
+      c.id === cellId 
+        ? { ...c, isRunning: true, output: '', error: '' }
+        : c
+    ));
 
     try {
-      // Redirect stdout to capture print statements
-      await pyodide.runPythonAsync(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-      `);
+      // Capture stdout
+      pyodide.setStdout({ batched: (msg: string) => {
+        setCells(prevCells => prevCells.map(c =>
+          c.id === cellId
+            ? { ...c, output: c.output + msg }
+            : c
+        ));
+      }});
 
-      // Run user code
-      await pyodide.runPythonAsync(code);
+      // Run the code
+      await pyodide.runPythonAsync(cell.code);
 
-      // Get the output
-      const stdout = await pyodide.runPythonAsync("sys.stdout.getvalue()");
-      
-      if (stdout) {
-        setOutput(stdout);
-      } else {
-        setOutput("Code executed successfully (no output)");
-      }
-    } catch (err: any) {
-      setError(err.message || "An error occurred while running your code");
-    } finally {
-      setIsRunning(false);
+      // Update execution count
+      const newCount = globalExecutionCount + 1;
+      setGlobalExecutionCount(newCount);
+
+      setCells(prevCells => prevCells.map(c =>
+        c.id === cellId
+          ? { 
+              ...c, 
+              isRunning: false, 
+              executionCount: newCount,
+              output: c.output || "Code executed successfully (no output)"
+            }
+          : c
+      ));
+    } catch (error: any) {
+      setCells(prevCells => prevCells.map(c =>
+        c.id === cellId
+          ? { 
+              ...c, 
+              isRunning: false, 
+              error: error.message || "An error occurred while running the code" 
+            }
+          : c
+      ));
     }
+  };
+
+  const addCell = (afterId?: string) => {
+    const newCell: CodeCell = {
+      id: Date.now().toString(),
+      code: '',
+      output: '',
+      error: '',
+      isRunning: false,
+      executionCount: null,
+    };
+
+    if (afterId) {
+      const index = cells.findIndex(c => c.id === afterId);
+      const newCells = [...cells];
+      newCells.splice(index + 1, 0, newCell);
+      setCells(newCells);
+    } else {
+      setCells([...cells, newCell]);
+    }
+  };
+
+  const deleteCell = (cellId: string) => {
+    if (cells.length === 1) return; // Keep at least one cell
+    setCells(cells.filter(c => c.id !== cellId));
+  };
+
+  const updateCellCode = (cellId: string, code: string) => {
+    setCells(prevCells => prevCells.map(c =>
+      c.id === cellId ? { ...c, code } : c
+    ));
   };
 
   const loadExample = (example: typeof exampleCodes[0]) => {
-    setCode(example.code);
-    setOutput("");
-    setError("");
+    setCells([{
+      id: Date.now().toString(),
+      code: example.code,
+      output: '',
+      error: '',
+      isRunning: false,
+      executionCount: null,
+    }]);
   };
 
-  const resetCode = () => {
-    setCode("");
-    setOutput("");
-    setError("");
+  const runAllCells = async () => {
+    for (const cell of cells) {
+      if (cell.code.trim()) {
+        await runCell(cell.id);
+      }
+    }
+  };
+
+  const clearAllOutputs = () => {
+    setCells(prevCells => prevCells.map(c => ({
+      ...c,
+      output: '',
+      error: '',
+      executionCount: null,
+    })));
+    setGlobalExecutionCount(0);
   };
 
   return (
     <div className="space-y-6 sm:space-y-8">
       <div className="space-y-3 sm:space-y-4">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight" data-testid="text-page-title">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-2 sm:gap-3 leading-tight">
           <Code2 className="h-8 w-8 sm:h-10 sm:w-10 text-primary flex-shrink-0" />
           {highlightText("Python Code Editor")}
         </h1>
-        <p className="text-sm sm:text-base lg:text-lg text-muted-foreground" data-testid="text-page-description">
-          Write, run, and test your Python code in real-time
+        <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">
+          Write and execute Python code in notebook-style cells (like Google Colab)
         </p>
       </div>
 
@@ -180,75 +259,123 @@ sys.stdout = StringIO()
         <AlertDescription className="text-xs sm:text-sm">
           {isLoading 
             ? "Loading Python interpreter... Please wait."
-            : "Python interpreter ready! Write your code below and click 'Run Code' to see the output. Try the example codes to get started!"
+            : "Python interpreter ready! Click the play button to run individual cells, or use the toolbar to run all cells."
           }
         </AlertDescription>
       </Alert>
 
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
-        {/* Code Examples Sidebar */}
-        <Card className="lg:col-span-1 order-1 lg:order-1">
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">Example Codes</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">Click to load an example</CardDescription>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6 pt-0">
-            <div className="space-y-2">
-              {exampleCodes.map((example, idx) => (
-                <Button
-                  key={idx}
-                  variant="outline"
-                  className="w-full justify-start text-left text-xs sm:text-sm"
-                  onClick={() => loadExample(example)}
-                >
-                  {example.name}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Toolbar */}
+      <Card>
+        <CardContent className="p-3 sm:p-4">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="default"
+              size="sm"
+              onClick={runAllCells}
+              disabled={isLoading}
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Run All
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => addCell()}
+              disabled={isLoading}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Cell
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearAllOutputs}
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Clear Outputs
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Editor and Output */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-6 order-2 lg:order-2">
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <CardTitle className="text-base sm:text-lg">Code Editor</CardTitle>
-                <div className="flex gap-2">
+      {/* Example Codes */}
+      <Card>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">Quick Start Examples</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">Click to load an example</CardDescription>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6 pt-0">
+          <div className="flex flex-wrap gap-2">
+            {exampleCodes.map((example, idx) => (
+              <Button
+                key={idx}
+                variant="outline"
+                size="sm"
+                onClick={() => loadExample(example)}
+              >
+                {example.name}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Code Cells */}
+      <div className="space-y-4">
+        {cells.map((cell, index) => (
+          <Card key={cell.id} className="border-l-4 border-l-primary">
+            <CardContent className="p-0">
+              {/* Cell Header */}
+              <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/30">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-muted-foreground">
+                    [{cell.executionCount ?? ' '}]
+                  </span>
+                  <span className="text-xs text-muted-foreground">Cell {index + 1}</span>
+                </div>
+                <div className="flex items-center gap-1">
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    onClick={resetCode}
-                    className="flex-1 sm:flex-none"
+                    onClick={() => runCell(cell.id)}
+                    disabled={cell.isRunning || !cell.code.trim() || isLoading}
+                    className="h-8 px-2"
                   >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Clear
+                    <Play className="w-4 h-4" />
                   </Button>
                   <Button
-                    variant="default"
+                    variant="ghost"
                     size="sm"
-                    onClick={runCode}
-                    disabled={isRunning || !code.trim() || isLoading}
-                    className="flex-1 sm:flex-none"
+                    onClick={() => addCell(cell.id)}
+                    disabled={isLoading}
+                    className="h-8 px-2"
                   >
-                    <Play className="w-4 h-4 mr-2" />
-                    {isRunning ? "Running..." : isLoading ? "Loading..." : "Run Code"}
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteCell(cell.id)}
+                    disabled={cells.length === 1}
+                    className="h-8 px-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent className="p-2 sm:p-4 lg:p-6">
-              <div className="border rounded-lg overflow-hidden">
+
+              {/* Code Editor */}
+              <div className="border-b">
                 <Editor
-                  height="300px"
+                  height="150px"
                   defaultLanguage="python"
-                  value={code}
-                  onChange={(value) => setCode(value || "")}
+                  value={cell.code}
+                  onChange={(value) => updateCellCode(cell.id, value || "")}
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },
                     fontSize: 14,
-                    lineNumbers: "on",
+                    lineNumbers: "off",
                     roundedSelection: true,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
@@ -261,7 +388,6 @@ sys.stdout = StringIO()
                       verticalScrollbarSize: 14,
                       horizontalScrollbarSize: 14,
                     },
-                    // Mobile-friendly settings
                     quickSuggestions: false,
                     suggestOnTriggerCharacters: false,
                     acceptSuggestionOnEnter: "off",
@@ -272,72 +398,83 @@ sys.stdout = StringIO()
                     autoClosingQuotes: "never",
                     formatOnPaste: false,
                     formatOnType: false,
-                    // Better touch support
                     selectOnLineNumbers: false,
                     glyphMargin: false,
                     folding: false,
                     lineDecorationsWidth: 0,
-                    lineNumbersMinChars: 3,
-                    renderLineHighlight: "all",
+                    lineNumbersMinChars: 0,
+                    renderLineHighlight: "none",
                     smoothScrolling: true,
                     cursorBlinking: "smooth",
                     cursorWidth: 2,
+                    // Disable word highlighting
+                    occurrencesHighlight: "off",
+                    selectionHighlight: false,
+                    renderWhitespace: "none",
+                    matchBrackets: "never",
                   }}
                 />
               </div>
-            </CardContent>
-          </Card>
 
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-base sm:text-lg flex items-center gap-2 flex-wrap">
-                <span>Output</span>
-                {output && !error && <CheckCircle2 className="w-4 h-4 text-green-600" />}
-                {error && <XCircle className="w-4 h-4 text-red-600" />}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 sm:p-6">
-              {error ? (
-                <Alert variant="destructive">
-                  <XCircle className="h-4 w-4" />
-                  <AlertDescription className="text-xs sm:text-sm break-words">{error}</AlertDescription>
-                </Alert>
-              ) : (
-                <pre className="w-full min-h-32 sm:min-h-40 p-3 sm:p-4 font-mono text-xs sm:text-sm bg-muted rounded-lg border overflow-x-auto whitespace-pre-wrap break-words">
-                  {output || "// Output will appear here after running your code"}
-                </pre>
+              {/* Output */}
+              {(cell.output || cell.error || cell.isRunning) && (
+                <div className="p-4 bg-muted/50">
+                  {cell.isRunning ? (
+                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
+                      Running...
+                    </div>
+                  ) : cell.error ? (
+                    <Alert variant="destructive" className="border-none">
+                      <XCircle className="h-4 w-4" />
+                      <AlertDescription className="text-xs sm:text-sm break-words">
+                        {cell.error}
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        Output:
+                      </div>
+                      <pre className="font-mono text-xs sm:text-sm text-foreground whitespace-pre-wrap break-words">
+                        {cell.output}
+                      </pre>
+                    </div>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>
-        </div>
+        ))}
       </div>
 
       {/* Tips Section */}
       <Card className="bg-accent/30">
         <CardHeader className="p-4 sm:p-6">
-          <CardTitle className="text-base sm:text-lg">💡 Tips for Using the Editor</CardTitle>
+          <CardTitle className="text-base sm:text-lg">💡 Tips for Using the Notebook</CardTitle>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <ul className="space-y-2 text-xs sm:text-sm">
             <li className="flex items-start gap-2">
               <span className="text-primary font-bold">•</span>
-              <span>Use <code className="bg-muted px-1 rounded">print()</code> to display output</span>
+              <span>Click the <Play className="w-3 h-3 inline" /> button to run individual cells</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary font-bold">•</span>
-              <span>Try the example codes to see different Python concepts in action</span>
+              <span>Add new cells with the <Plus className="w-3 h-3 inline" /> button to organize your code</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary font-bold">•</span>
-              <span>Use proper indentation (4 spaces) for code blocks like loops and functions</span>
+              <span>Variables defined in one cell are available in subsequent cells</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary font-bold">•</span>
-              <span>Check for syntax errors if your code doesn't run correctly</span>
+              <span>Run cells in order for best results - execution numbers show the run order</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary font-bold">•</span>
-              <span>Practice regularly to improve your Python skills!</span>
+              <span>Use <code className="bg-muted px-1 rounded">print()</code> to display output from your code</span>
             </li>
           </ul>
         </CardContent>
