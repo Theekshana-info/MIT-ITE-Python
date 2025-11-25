@@ -313,28 +313,28 @@ sys.stdout = StringIO()
       {/* Tips Section */}
       <Card className="bg-accent/30">
         <CardHeader className="p-4 sm:p-6">
-          <CardTitle className="text-base sm:text-lg">≡ƒÆí Tips for Using the Editor</CardTitle>
+          <CardTitle className="text-base sm:text-lg">💡 Tips for Using the Editor</CardTitle>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <ul className="space-y-2 text-xs sm:text-sm">
             <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">ΓÇó</span>
+              <span className="text-primary font-bold">•</span>
               <span>Use <code className="bg-muted px-1 rounded">print()</code> to display output</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">ΓÇó</span>
+              <span className="text-primary font-bold">•</span>
               <span>Try the example codes to see different Python concepts in action</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">ΓÇó</span>
+              <span className="text-primary font-bold">•</span>
               <span>Use proper indentation (4 spaces) for code blocks like loops and functions</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">ΓÇó</span>
+              <span className="text-primary font-bold">•</span>
               <span>Check for syntax errors if your code doesn't run correctly</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">ΓÇó</span>
+              <span className="text-primary font-bold">•</span>
               <span>Practice regularly to improve your Python skills!</span>
             </li>
           </ul>
