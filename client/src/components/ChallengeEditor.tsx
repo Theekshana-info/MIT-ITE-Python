@@ -23,6 +23,7 @@ import {
 import Editor from "@monaco-editor/react";
 import { usePyodide } from "@/contexts/PyodideContext";
 import type { CodingChallenge } from "@/types/challenges";
+import { useMobileEditorScroll } from "@/hooks/use-mobile-editor-scroll";
 
 interface ChallengeEditorProps {
   challenge: CodingChallenge;
@@ -44,6 +45,8 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const [isRunningSolution, setIsRunningSolution] = useState(false);
   const codeEditorWrapperRef = useRef<HTMLDivElement>(null);
   const solutionEditorWrapperRef = useRef<HTMLDivElement>(null);
+  useMobileEditorScroll(codeEditorWrapperRef);
+  useMobileEditorScroll(solutionEditorWrapperRef);
 
   const handleRunCode = async () => {
     if (pyodideLoading) {

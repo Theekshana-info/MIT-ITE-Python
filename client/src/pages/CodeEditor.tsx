@@ -6,6 +6,7 @@ import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-reac
 import { useState, useEffect, useRef } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
 import Editor from "@monaco-editor/react";
+import { useMobileEditorScroll } from "@/hooks/use-mobile-editor-scroll";
 
 interface CodeEditorProps {
   searchQuery: string;
@@ -83,6 +84,7 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
   const [pyodide, setPyodide] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const editorWrapperRef = useRef<HTMLDivElement>(null);
+  useMobileEditorScroll(editorWrapperRef);
 
   // Load Pyodide on component mount
   useEffect(() => {
