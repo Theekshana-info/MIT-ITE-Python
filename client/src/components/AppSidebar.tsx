@@ -4,6 +4,7 @@ import { Link } from "wouter";
 const menuItems = [
   { title: "Home", url: "/", icon: Home, testId: "nav-home" },
   { title: "Data Types", url: "/data-types", icon: Database, testId: "nav-data-types" },
+  { title: "Coding Challenges", url: "/coding-challenges", icon: Code2, testId: "nav-coding-challenges" },
   { title: "Operators", url: "/operators", icon: Calculator, testId: "nav-operators" },
   { title: "Conditionals", url: "/conditionals", icon: GitBranch, testId: "nav-conditionals" },
   { title: "Loops", url: "/loops", icon: RefreshCw, testId: "nav-loops" },

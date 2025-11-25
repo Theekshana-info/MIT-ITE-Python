@@ -29,6 +29,7 @@ export function Navbar() {
   // Quick access items for the horizontal scrollable bar
   const quickAccessItems = [
     { href: "/data-types", label: "Data Types", icon: Database },
+    { href: "/coding-challenges", label: "Challenges", icon: Code2 },
     { href: "/operators", label: "Operators", icon: Calculator },
     { href: "/conditionals", label: "Conditionals", icon: GitBranch },
     { href: "/loops", label: "Loops", icon: RefreshCw },
@@ -45,8 +46,9 @@ export function Navbar() {
     { href: "/", label: "Home", icon: Home },
     { href: "/data-types", label: "Learn", icon: BookOpen },
     { href: "/code-editor", label: "Code Editor", icon: Terminal },
+    { href: "/coding-challenges", label: "Coding Challenges", icon: Code2 },
     { href: "/activities", label: "Practice", icon: Trophy },
-    { href: "/summary", label: "Reference", icon: Code2 },
+    { href: "/summary", label: "Reference", icon: BookOpen },
   ];
 
   const isActive = (path: string) => {

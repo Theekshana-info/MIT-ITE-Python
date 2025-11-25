@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Navbar } from "@/components/Navbar";
+import { PyodideProvider } from "@/contexts/PyodideContext";
 import { useEffect } from "react";
 
 // Pages
@@ -20,6 +21,7 @@ import Flowcharts from "@/pages/Flowcharts";
 import Activities from "@/pages/Activities";
 import Summary from "@/pages/Summary";
 import CodeEditor from "@/pages/CodeEditor";
+import CodingChallenges from "@/pages/CodingChallenges";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +29,7 @@ function Router() {
     <Switch>
       <Route path="/" component={() => <Home searchQuery="" />} />
       <Route path="/data-types" component={() => <DataTypes searchQuery="" />} />
+      <Route path="/coding-challenges" component={() => <CodingChallenges searchQuery="" />} />
       <Route path="/operators" component={() => <Operators searchQuery="" />} />
       <Route path="/conditionals" component={() => <Conditionals searchQuery="" />} />
       <Route path="/loops" component={() => <Loops searchQuery="" />} />
@@ -52,26 +55,28 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-background">
-          {/* Desktop Sidebar - Fixed */}
-          <AppSidebar currentPath={location} />
-          
-          {/* Main Content Area */}
-          <div className="lg:pl-72">
-            {/* Top Navigation */}
-            <Navbar />
+      <PyodideProvider>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background">
+            {/* Desktop Sidebar - Fixed */}
+            <AppSidebar currentPath={location} />
             
-            {/* Page Content */}
-            <main className="min-h-screen bg-background">
-              <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
-                <Router />
-              </div>
-            </main>
+            {/* Main Content Area */}
+            <div className="lg:pl-72">
+              {/* Top Navigation */}
+              <Navbar />
+              
+              {/* Page Content */}
+              <main className="min-h-screen bg-background">
+                <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
+                  <Router />
+                </div>
+              </main>
+            </div>
           </div>
-        </div>
-        <Toaster />
-      </TooltipProvider>
+          <Toaster />
+        </TooltipProvider>
+      </PyodideProvider>
     </QueryClientProvider>
   );
 }

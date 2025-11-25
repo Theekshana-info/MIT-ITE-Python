@@ -260,6 +260,7 @@ sys.stdout = StringIO()
                       horizontal: 'auto',
                       verticalScrollbarSize: 14,
                       horizontalScrollbarSize: 14,
+                      alwaysConsumeMouseWheel: false,
                     },
                     // Mobile-friendly settings
                     quickSuggestions: false,
