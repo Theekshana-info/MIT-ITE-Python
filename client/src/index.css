@@ -390,5 +390,15 @@
     display: none;  /* Safari and Chrome */
   }
 
+  /* Monaco Editor mobile touch scroll support */
+  .monaco-editor,
+  .monaco-editor .overflow-guard,
+  .monaco-editor .monaco-scrollable-element,
+  .monaco-editor .view-lines,
+  .monaco-editor .monaco-editor-background {
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
 }
 

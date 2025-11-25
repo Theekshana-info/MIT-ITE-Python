@@ -1,9 +1,9 @@
 import { RefObject, useEffect } from "react";
 
 /**
- * Bridges touch scrolling between Monaco editor and the surrounding page on mobile devices.
- * Ensures the page scrolls when the editor content is shorter than its viewport, and
- * when the editor reaches its scroll boundaries.
+ * Enables proper touch scrolling for Monaco Editor on mobile devices.
+ * When content fits in the editor (no scroll needed), page scrolls.
+ * When content overflows, editor scrolls first, then page at boundaries.
  */
 export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enabled = true) {
   useEffect(() => {
@@ -16,81 +16,38 @@ export function useMobileEditorScroll(wrapperRef: RefObject<HTMLElement>, enable
       return;
     }
 
-    let scrollElement: HTMLElement | null = null;
-    let rafId: number | null = null;
-    let lastY = 0;
-
-    const handleTouchStart = (event: TouchEvent) => {
-      if (event.touches.length !== 1) {
-        return;
-      }
-      lastY = event.touches[0].clientY;
+    // Find Monaco's internal scrollable element and apply touch-action CSS
+    const applyTouchAction = () => {
+      const monacoScrollable = wrapper.querySelector<HTMLElement>(".monaco-scrollable-element");
+      const overflowGuard = wrapper.querySelector<HTMLElement>(".overflow-guard");
+      const viewLines = wrapper.querySelector<HTMLElement>(".view-lines");
+      
+      // Apply touch-action to allow vertical panning
+      [monacoScrollable, overflowGuard, viewLines].forEach(el => {
+        if (el) {
+          el.style.touchAction = "pan-y";
+        }
+      });
     };
 
-    const handleTouchMove = (event: TouchEvent) => {
-      if (event.touches.length !== 1 || !scrollElement) {
-        return;
-      }
+    // Apply immediately
+    applyTouchAction();
 
-      const currentY = event.touches[0].clientY;
-      const deltaY = lastY - currentY;
-      lastY = currentY;
+    // Also apply after Monaco finishes rendering (it recreates DOM elements)
+    const timeoutId = setTimeout(applyTouchAction, 500);
+    const timeoutId2 = setTimeout(applyTouchAction, 1000);
 
-      const { scrollHeight, clientHeight, scrollTop } = scrollElement;
-      const isScrollable = scrollHeight > clientHeight + 1;
-
-      if (!isScrollable) {
-        return; // Let the page handle scrolling.
-      }
-
-      const atUpperBound = scrollTop <= 0 && deltaY < 0;
-      const atLowerBound = scrollTop + clientHeight >= scrollHeight - 1 && deltaY > 0;
-
-      if (atUpperBound || atLowerBound) {
-        return; // Allow the page to scroll when the editor hits its boundary.
-      }
-
-      event.preventDefault();
-      scrollElement.scrollTop += deltaY;
-    };
-
-    const detachListeners = () => {
-      if (scrollElement) {
-        scrollElement.removeEventListener("touchstart", handleTouchStart);
-        scrollElement.removeEventListener("touchmove", handleTouchMove);
-      }
-      scrollElement = null;
-    };
-
-    const attachListeners = () => {
-      detachListeners();
-      scrollElement = wrapper.querySelector<HTMLElement>(".monaco-scrollable-element");
-
-      if (!scrollElement) {
-        rafId = window.requestAnimationFrame(attachListeners);
-        return;
-      }
-
-      scrollElement.addEventListener("touchstart", handleTouchStart, { passive: true });
-      scrollElement.addEventListener("touchmove", handleTouchMove, { passive: false });
-    };
-
-    attachListeners();
-
+    // Watch for DOM changes and reapply
     const observer = new MutationObserver(() => {
-      if (!scrollElement || !wrapper.contains(scrollElement)) {
-        attachListeners();
-      }
+      applyTouchAction();
     });
 
     observer.observe(wrapper, { childList: true, subtree: true });
 
     return () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-      }
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
       observer.disconnect();
-      detachListeners();
     };
   }, [wrapperRef, enabled]);
 }

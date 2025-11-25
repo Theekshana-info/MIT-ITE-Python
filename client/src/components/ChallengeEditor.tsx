@@ -199,10 +199,6 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
             <div 
               ref={codeEditorWrapperRef}
               className="border rounded-lg overflow-hidden"
-              style={{ 
-                overflowY: code.split('\n').length > 14 ? 'auto' : 'visible',
-                WebkitOverflowScrolling: 'touch'
-              }}
             >
               <Editor
                 height="350px"
@@ -335,10 +331,6 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
             <div 
               ref={solutionEditorWrapperRef}
               className="border rounded-lg overflow-hidden"
-              style={{ 
-                overflowY: challenge.solutionCode.split('\n').length > 12 ? 'auto' : 'visible',
-                WebkitOverflowScrolling: 'touch'
-              }}
             >
               <Editor
                 height="300px"

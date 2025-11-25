@@ -244,10 +244,6 @@ sys.stdout = StringIO()
               <div 
                 ref={editorWrapperRef}
                 className="border rounded-lg overflow-hidden"
-                style={{ 
-                  overflowY: code.split('\n').length > 12 ? 'auto' : 'visible',
-                  WebkitOverflowScrolling: 'touch'
-                }}
               >
                 <Editor
                   height="300px"
