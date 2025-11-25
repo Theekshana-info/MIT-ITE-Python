@@ -143,17 +143,22 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
     ));
 
     try {
+      let outputBuffer = '';
+
       // Capture stdout
-      pyodide.setStdout({ batched: (msg: string) => {
-        setCells(prevCells => prevCells.map(c =>
-          c.id === cellId
-            ? { ...c, output: c.output + msg }
-            : c
-        ));
-      }});
+      pyodide.setStdout({
+        batched: (msg: string) => {
+          outputBuffer += msg;
+        }
+      });
 
       // Run the code
-      await pyodide.runPythonAsync(cell.code);
+      const result = await pyodide.runPythonAsync(cell.code);
+
+      // If there's a return value (not None), add it to output
+      if (result !== undefined && result !== null && typeof result !== 'object') {
+        outputBuffer += String(result) + '\n';
+      }
 
       // Update execution count
       const newCount = globalExecutionCount + 1;
@@ -165,7 +170,7 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
               ...c, 
               isRunning: false, 
               executionCount: newCount,
-              output: c.output || "Code executed successfully (no output)"
+              output: outputBuffer.trim() || "Code executed successfully (no output)"
             }
           : c
       ));
