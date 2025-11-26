@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Info, Code2, Trophy, Calculator, GitBranch, RefreshCw, Code, ListOrdered } from "lucide-react";
+import { Info, Code2, Trophy, Calculator, GitBranch, RefreshCw, Code, ListOrdered, Database } from "lucide-react";
 import { ChallengeList } from "@/components/ChallengeList";
 import { ChallengeEditor } from "@/components/ChallengeEditor";
 import { codingChallenges } from "@/data/codingChallenges";
@@ -22,6 +22,7 @@ interface CodingChallengesProps {
 // Topic configuration
 const topics = [
   { id: "all", label: "All Topics", icon: Code2, tag: "" },
+  { id: "data-types", label: "Data Types", icon: Database, tag: "data-types" },
   { id: "operators", label: "Operators", icon: Calculator, tag: "operators" },
   { id: "conditionals", label: "Conditionals", icon: GitBranch, tag: "conditionals" },
   { id: "loops", label: "Loops", icon: RefreshCw, tag: "loops" },
