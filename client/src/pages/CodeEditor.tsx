@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code2, Play, RotateCcw, Info, CheckCircle2, XCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { highlightSearchText } from "@/lib/searchUtils";
 import Editor from "@monaco-editor/react";
 
@@ -82,6 +82,79 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
   const [error, setError] = useState("");
   const [pyodide, setPyodide] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const editorRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Handle editor mount to fix mobile touch scrolling
+  const handleEditorDidMount = useCallback((editor: any, monaco: any) => {
+    editorRef.current = editor;
+  }, []);
+
+  // Mobile touch scroll handler on container
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let startY = 0;
+    let isTouching = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        isTouching = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching || e.touches.length !== 1 || !editorRef.current) return;
+
+      const editor = editorRef.current;
+      const currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      startY = currentY;
+
+      const scrollHeight = editor.getScrollHeight();
+      const layoutInfo = editor.getLayoutInfo();
+      const clientHeight = layoutInfo.height;
+      const scrollTop = editor.getScrollTop();
+
+      // Check if editor content needs scrolling (has overflow)
+      const hasOverflow = scrollHeight > clientHeight + 5;
+
+      if (!hasOverflow) {
+        // No overflow - page should scroll, don't interfere
+        return;
+      }
+
+      // Has overflow - check boundaries
+      const atTop = scrollTop <= 1;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+        // At boundary, page should scroll, don't interfere
+        return;
+      }
+
+      // Editor should scroll - prevent page scroll and scroll editor
+      e.preventDefault();
+      editor.setScrollTop(scrollTop + deltaY);
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
 
   // Load Pyodide on component mount
   useEffect(() => {
@@ -238,12 +311,13 @@ sys.stdout = StringIO()
               </div>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 lg:p-6">
-              <div className="border rounded-lg overflow-hidden">
+              <div ref={containerRef} className="border rounded-lg overflow-hidden">
                 <Editor
                   height="300px"
                   defaultLanguage="python"
                   value={code}
                   onChange={(value) => setCode(value || "")}
+                  onMount={handleEditorDidMount}
                   theme="vs-dark"
                   options={{
                     minimap: { enabled: false },

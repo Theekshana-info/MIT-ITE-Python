@@ -4,7 +4,7 @@
  * Works with any CodingChallenge object
  */
 
-import { useState } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -42,6 +42,137 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const [solutionOutput, setSolutionOutput] = useState("");
   const [solutionError, setSolutionError] = useState("");
   const [isRunningSolution, setIsRunningSolution] = useState(false);
+  
+  // Refs for mobile touch scroll handling
+  const codeEditorRef = useRef<any>(null);
+  const solutionEditorRef = useRef<any>(null);
+  const codeContainerRef = useRef<HTMLDivElement>(null);
+  const solutionContainerRef = useRef<HTMLDivElement>(null);
+
+  // Editor mount handlers
+  const handleCodeEditorMount = useCallback((editor: any) => {
+    codeEditorRef.current = editor;
+  }, []);
+
+  const handleSolutionEditorMount = useCallback((editor: any) => {
+    solutionEditorRef.current = editor;
+  }, []);
+
+  // Mobile touch scroll effect for code editor
+  useEffect(() => {
+    const container = codeContainerRef.current;
+    const editorRef = codeEditorRef;
+    if (!container) return;
+
+    let startY = 0;
+    let isTouching = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        isTouching = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching || e.touches.length !== 1 || !editorRef.current) return;
+
+      const editor = editorRef.current;
+      const currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      startY = currentY;
+
+      const scrollHeight = editor.getScrollHeight();
+      const layoutInfo = editor.getLayoutInfo();
+      const clientHeight = layoutInfo.height;
+      const scrollTop = editor.getScrollTop();
+
+      const hasOverflow = scrollHeight > clientHeight + 5;
+
+      if (!hasOverflow) return;
+
+      const atTop = scrollTop <= 1;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) return;
+
+      e.preventDefault();
+      editor.setScrollTop(scrollTop + deltaY);
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
+  // Mobile touch scroll effect for solution editor
+  useEffect(() => {
+    if (!showSolution) return;
+    
+    const container = solutionContainerRef.current;
+    const editorRef = solutionEditorRef;
+    if (!container) return;
+
+    let startY = 0;
+    let isTouching = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        isTouching = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching || e.touches.length !== 1 || !editorRef.current) return;
+
+      const editor = editorRef.current;
+      const currentY = e.touches[0].clientY;
+      const deltaY = startY - currentY;
+      startY = currentY;
+
+      const scrollHeight = editor.getScrollHeight();
+      const layoutInfo = editor.getLayoutInfo();
+      const clientHeight = layoutInfo.height;
+      const scrollTop = editor.getScrollTop();
+
+      const hasOverflow = scrollHeight > clientHeight + 5;
+
+      if (!hasOverflow) return;
+
+      const atTop = scrollTop <= 1;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) return;
+
+      e.preventDefault();
+      editor.setScrollTop(scrollTop + deltaY);
+    };
+
+    const handleTouchEnd = () => {
+      isTouching = false;
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [showSolution]);
 
   const handleRunCode = async () => {
     if (pyodideLoading) {
@@ -191,12 +322,13 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
               Loading Python engine...
             </div>
           ) : (
-            <div className="border rounded-lg overflow-hidden">
+            <div ref={codeContainerRef} className="border rounded-lg overflow-hidden">
               <Editor
                 height="350px"
                 defaultLanguage="python"
                 theme="vs-dark"
                 value={code}
+                onMount={handleCodeEditorMount}
                 onChange={(value) => setCode(value || "")}
                 options={{
                   minimap: { enabled: false },
@@ -320,12 +452,13 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
         </CardHeader>
         {showSolution && (
           <CardContent className="space-y-4">
-            <div className="border rounded-lg overflow-hidden">
+            <div ref={solutionContainerRef} className="border rounded-lg overflow-hidden">
               <Editor
                 height="300px"
                 defaultLanguage="python"
                 theme="vs-dark"
                 value={challenge.solutionCode}
+                onMount={handleSolutionEditorMount}
                 options={{
                   minimap: { enabled: false },
                   fontSize: 16,
