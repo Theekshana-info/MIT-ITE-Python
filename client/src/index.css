@@ -391,13 +391,24 @@
   }
 
   /* Monaco Editor mobile touch scroll support */
+  /* Override Monaco's default touch-action: none to allow page scrolling */
   .monaco-editor,
+  .monaco-editor *,
   .monaco-editor .overflow-guard,
   .monaco-editor .monaco-scrollable-element,
+  .monaco-editor .lines-content,
   .monaco-editor .view-lines,
-  .monaco-editor .monaco-editor-background {
-    touch-action: pan-y !important;
-    -webkit-overflow-scrolling: touch;
+  .monaco-editor .view-line,
+  .monaco-editor .monaco-editor-background,
+  .monaco-editor .inputarea,
+  .monaco-editor .margin,
+  .monaco-editor .scroll-decoration {
+    touch-action: pan-y pinch-zoom !important;
+  }
+
+  /* Ensure the editor container allows touch scrolling */
+  .monaco-editor .monaco-scrollable-element > .scrollbar {
+    touch-action: none !important;
   }
 
 }

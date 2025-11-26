@@ -4,7 +4,7 @@
  * Works with any CodingChallenge object
  */
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -23,7 +23,6 @@ import {
 import Editor from "@monaco-editor/react";
 import { usePyodide } from "@/contexts/PyodideContext";
 import type { CodingChallenge } from "@/types/challenges";
-import { useMobileEditorScroll } from "@/hooks/use-mobile-editor-scroll";
 
 interface ChallengeEditorProps {
   challenge: CodingChallenge;
@@ -43,10 +42,6 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const [solutionOutput, setSolutionOutput] = useState("");
   const [solutionError, setSolutionError] = useState("");
   const [isRunningSolution, setIsRunningSolution] = useState(false);
-  const codeEditorWrapperRef = useRef<HTMLDivElement>(null);
-  const solutionEditorWrapperRef = useRef<HTMLDivElement>(null);
-  useMobileEditorScroll(codeEditorWrapperRef);
-  useMobileEditorScroll(solutionEditorWrapperRef, showSolution);
 
   const handleRunCode = async () => {
     if (pyodideLoading) {
@@ -196,10 +191,7 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
               Loading Python engine...
             </div>
           ) : (
-            <div 
-              ref={codeEditorWrapperRef}
-              className="border rounded-lg overflow-hidden"
-            >
+            <div className="border rounded-lg overflow-hidden">
               <Editor
                 height="350px"
                 defaultLanguage="python"
@@ -328,10 +320,7 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
         </CardHeader>
         {showSolution && (
           <CardContent className="space-y-4">
-            <div 
-              ref={solutionEditorWrapperRef}
-              className="border rounded-lg overflow-hidden"
-            >
+            <div className="border rounded-lg overflow-hidden">
               <Editor
                 height="300px"
                 defaultLanguage="python"
