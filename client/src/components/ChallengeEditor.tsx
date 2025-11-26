@@ -49,6 +49,16 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
   const codeContainerRef = useRef<HTMLDivElement>(null);
   const solutionContainerRef = useRef<HTMLDivElement>(null);
 
+  // Reset editor state when challenge changes
+  useEffect(() => {
+    setCode(challenge.starterCode);
+    setOutput("");
+    setError("");
+    setShowSolution(false);
+    setSolutionOutput("");
+    setSolutionError("");
+  }, [challenge.id]);
+
   // Editor mount handlers
   const handleCodeEditorMount = useCallback((editor: any) => {
     codeEditorRef.current = editor;
