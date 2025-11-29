@@ -123,6 +123,8 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
 
       if (!hasOverflow) {
         // No overflow - page should scroll, don't interfere
+        // Stop propagation so Monaco doesn't see it
+        e.stopPropagation();
         return;
       }
 
@@ -132,11 +134,13 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
 
       if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
         // At boundary, page should scroll, don't interfere
+        e.stopPropagation();
         return;
       }
 
       // Editor should scroll - prevent page scroll and scroll editor
       e.preventDefault();
+      e.stopPropagation();
       editor.setScrollTop(scrollTop + deltaY);
     };
 
@@ -144,14 +148,15 @@ export default function CodeEditor({ searchQuery }: CodeEditorProps) {
       isTouching = false;
     };
 
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    // Use capture: true to intercept events before Monaco sees them
+    container.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true, capture: true });
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchstart', handleTouchStart, { capture: true });
+      container.removeEventListener('touchmove', handleTouchMove, { capture: true });
+      container.removeEventListener('touchend', handleTouchEnd, { capture: true });
     };
   }, []);
 
@@ -211,7 +216,7 @@ sys.stdout = StringIO()
 
       // Get the output
       const stdout = await pyodide.runPythonAsync("sys.stdout.getvalue()");
-      
+
       if (stdout) {
         setOutput(stdout);
       } else {
@@ -251,7 +256,7 @@ sys.stdout = StringIO()
       <Alert>
         <Info className="h-4 w-4" />
         <AlertDescription className="text-xs sm:text-sm">
-          {isLoading 
+          {isLoading
             ? "Loading Python interpreter... Please wait."
             : "Python interpreter ready! Write your code below and click 'Run Code' to see the output. Try the example codes to get started!"
           }

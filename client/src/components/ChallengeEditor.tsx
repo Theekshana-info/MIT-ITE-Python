@@ -99,14 +99,26 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
 
       const hasOverflow = scrollHeight > clientHeight + 5;
 
-      if (!hasOverflow) return;
+      // If no overflow, we want the PAGE to scroll.
+      // We stop propagation so Monaco doesn't see the event and preventDefault.
+      if (!hasOverflow) {
+        e.stopPropagation();
+        return;
+      }
 
       const atTop = scrollTop <= 1;
       const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
 
-      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) return;
+      // If at boundary and pulling away, we want the PAGE to scroll.
+      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+        e.stopPropagation();
+        return;
+      }
 
+      // Otherwise, we want the EDITOR to scroll.
+      // We prevent default to stop page scroll, and manually scroll the editor.
       e.preventDefault();
+      e.stopPropagation();
       editor.setScrollTop(scrollTop + deltaY);
     };
 
@@ -114,14 +126,15 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
       isTouching = false;
     };
 
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    // Use capture: true to intercept events before Monaco sees them
+    container.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true, capture: true });
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchstart', handleTouchStart, { capture: true });
+      container.removeEventListener('touchmove', handleTouchMove, { capture: true });
+      container.removeEventListener('touchend', handleTouchEnd, { capture: true });
     };
   }, []);
 
@@ -158,14 +171,21 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
 
       const hasOverflow = scrollHeight > clientHeight + 5;
 
-      if (!hasOverflow) return;
+      if (!hasOverflow) {
+        e.stopPropagation();
+        return;
+      }
 
       const atTop = scrollTop <= 1;
       const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
 
-      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) return;
+      if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+        e.stopPropagation();
+        return;
+      }
 
       e.preventDefault();
+      e.stopPropagation();
       editor.setScrollTop(scrollTop + deltaY);
     };
 
@@ -173,14 +193,14 @@ export function ChallengeEditor({ challenge, onBack, onNext, hasNext }: Challeng
       isTouching = false;
     };
 
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true, capture: true });
 
     return () => {
-      container.removeEventListener('touchstart', handleTouchStart);
-      container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('touchstart', handleTouchStart, { capture: true });
+      container.removeEventListener('touchmove', handleTouchMove, { capture: true });
+      container.removeEventListener('touchend', handleTouchEnd, { capture: true });
     };
   }, [showSolution]);
 
