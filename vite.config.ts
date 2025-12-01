@@ -5,12 +5,6 @@ import path from "path";
 export default defineConfig({
   plugins: [
     react(),
-    // Only include Replit plugins in Replit environment
-    ...(process.env.REPL_ID !== undefined
-      ? [
-          (await import("@replit/vite-plugin-runtime-error-modal")).default(),
-        ]
-      : []),
   ],
   resolve: {
     alias: {

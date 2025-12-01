@@ -66,7 +66,6 @@ Visit your Vercel deployment URL (e.g., `https://mit-ite-python.vercel.app`)
 
 ### Build Errors
 - **Error: "Cannot find module"**: Make sure all dependencies are in `package.json`
-- **Replit plugin errors**: These have been removed from production builds
 - **Build timeout**: Vercel free tier has a 45-second build limit
 
 ### Runtime Errors
@@ -101,7 +100,7 @@ Visit your Vercel deployment URL (e.g., `https://mit-ite-python.vercel.app`)
 
 ## Files Modified for Vercel Deployment
 
-✅ **vite.config.ts** - Fixed build output path and removed Replit-specific plugins
+✅ **vite.config.ts** - Fixed build output path for deployment
 ✅ **vercel.json** - Added Vercel configuration for routing
 ✅ **package.json** - Fixed start script to use cross-env
 ✅ **server/index-prod.ts** - Fixed path to built files
